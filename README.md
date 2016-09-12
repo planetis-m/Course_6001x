@@ -1,4 +1,4 @@
-# Course6.00.1x Introduction-to-Computer-Science-and-Programming
+# MITx 6.00.1x Introduction to Computer Science and Programming
 Problem set, lecture code and finger excercises from the course, written in nim lang.
 
                                               Hello!
@@ -6,16 +6,16 @@ Problem set, lecture code and finger excercises from the course, written in nim 
 I rewritten code from the course in [nim lang](http://nim-lang.org/) in order to learn 
 the language better. I hope you find it useful too!
 
+## Week 1
+1. Guess and check for square roots
+
 ## Problem Set 1
 1. Counting Vowels
 2. Counting Bobs
-..* Solution using slices
-..* Solution using "fast search" algorithm
+  * Solution using slices
+  * Solution using "fast search" algorithm
 3. Alphabetical Substrings
-..* Alternative Solution
-
-## Week 1
-1. Guess and check for square roots
+  * Alternative Solution
 
 ## Week 2
 1. Palindrome strings
