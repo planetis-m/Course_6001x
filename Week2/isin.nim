@@ -27,9 +27,15 @@ proc isIn(char: char, aStr: string): bool =
    # Otherwise the test character is larger than the middle character,
    #  so recursively search on the last half of aStr
     else:
-        return isIn(char, aStr[<n div 2 .. <n]) # start is wrong
+        return isIn(char, aStr[n div 2 + 1 .. <n]) # start is wrong
 
-echo isIn('a', "")
-echo isIn('r', "uy")
-echo isIn('a', "acfjlruxyzz")
-echo isIn('v', "begilsvw")
+doAssert isIn('a', "") == false
+doAssert isIn('a', "acfjlruxyzz") == true
+doAssert isIn('j', "abbghijmquvvw") == true
+doAssert isIn('e', "abffllloopvwy") == false
+doAssert isIn('h', "dddhlprr") == true
+doAssert isIn('a', "begilsvw") == false
+doAssert isIn('u', "mquwxz") == true
+doAssert isIn('w', "acdeeghimpqrvxx") == false
+doAssert isIn('s', "dfno") == false
+doAssert isIn('r', "uy") == false

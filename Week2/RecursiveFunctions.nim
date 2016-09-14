@@ -1,5 +1,5 @@
 
-proc mult*(a, b: int): int =
+proc mult*[T](a, b: T): T =
     if b == 1:
         return a
     else:
@@ -11,7 +11,7 @@ proc fact*(n: int): int =
     else:
         return n * fact(n - 1)
 
-proc pow*(base, exp: int): int =
+proc pow*[T](base: T, exp: int): T =
     # 
     # base: int or float.
     # exp: int >= 0
@@ -58,10 +58,12 @@ proc decToBin*(num: int): string =
     else:
         return decToBin(num div 2) & $(num mod 2)
 
-when false:
-    assert mult(5, 12) == 60
-    assert fact(4) == 24
-    assert pow(2, 3) == 8
-    assert gcd(9, 12) == 3
-    assert fib(40) == 165580141
-    assert decToBin(72) == "1001000"
+when isMainModule:
+    doAssert mult(5, 12) == 60
+    doAssert mult(5.0, 12.0) == 60.0
+    doAssert fact(4) == 24
+    doAssert pow(2, 3) == 8
+    doAssert pow(2.0, 3) == 8.0
+    doAssert gcd(9, 12) == 3
+    doAssert fib(40) == 165580141
+    doAssert decToBin(72) == "1001000"
