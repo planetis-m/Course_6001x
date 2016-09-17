@@ -118,40 +118,40 @@ proc hangman(secretWord: string) =
         msg8 = "Congratulations, you won!"
         msg9 = "Sorry, you ran out of guesses. The word was $1."
 
-    echo msg0 # Greets the player
+    echo msg0 # Greet the player
 
     let n = len(secretWord)
-    echo msg1 % [$n] # Informs the player about the length of the word
+    echo msg1 % [$n] # Inform the player about the length of the word
 
     var mistakesMade = 0
     var availableLetters = "abcdefghijklmnopqrstuvwxyz"
     var lettersGuessed: seq[char] = @[]
 
-    while mistakesMade < 8:
+    while mistakesMade < 8: # 
         echo "-".repeat(13)
 
         let remainingTries = 8 - mistakesMade
-        echo msg2 % [$remainingTries] # Informs the player about the number of tries
-        echo msg3, availableLetters
+        echo msg2 % [$remainingTries] # Inform the player about the number of tries
+        echo msg3, availableLetters # Inform the player about the available letters
 
-        let guess = readLineFromStdin(msg4).toLower()
+        let guess = readLineFromStdin(msg4).toLower() # get input from player
 
-        if guess[0] in lettersGuessed:
+        if guess[0] in lettersGuessed: # continue when player has already guessed that letter
             echo msg7, getGuessedWord(secretWord, lettersGuessed)
             continue
 
-        lettersGuessed.add(guess[0])
+        lettersGuessed.add(guess[0]) # add player's guess to the guessed letters
 
         if guess[0] in secretWord:
             echo msg5, getGuessedWord(secretWord, lettersGuessed)
         else:
             echo msg6, getGuessedWord(secretWord, lettersGuessed)
-            inc(mistakesMade)
+            inc(mistakesMade) # player loses a guess when he guesses incorrectly
 
-        if isWordGuessed(secretWord, lettersGuessed):
+        if isWordGuessed(secretWord, lettersGuessed): # break the loop when the word is found
             break
 
-        availableLetters = getAvailableLetters(lettersGuessed)
+        availableLetters = getAvailableLetters(lettersGuessed) # update the available letters
 
     echo "-".repeat(13)
     if isWordGuessed(secretWord, lettersGuessed):
