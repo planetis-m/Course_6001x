@@ -4,7 +4,7 @@
 # -----------------------------------
 # Helper code
 
-import osproc, random, rdstdin, strtabs, strutils
+import os, random, rdstdin, strtabs, strutils, terminal
 
 # Initializes the random number generator
 randomize()
@@ -38,8 +38,17 @@ proc chooseWord(wordlist: seq[string]): string =
     #
     return random(wordlist)
 
+proc clearTerminal() =
+    #
+    # controls the terminal
+    #
+    eraseScreen()
+    setCursorPos(0, 0)
+
 # end of helper code
 # -----------------------------------
+
+clearTerminal()
 
 # Load the list of words into the variable wordlist
 # so that it can be accessed from anywhere in the program
@@ -167,4 +176,5 @@ while true:
     except IOError: # exit when user hits ^C or ^D
         break
 
-    discard execCmd "sleep 2 && clear"
+    sleep(2000)
+    clearTerminal()
