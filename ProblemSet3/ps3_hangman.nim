@@ -127,6 +127,8 @@ proc hangman(secretWord: string) =
         msg8 = "Congratulations, you won!"
         msg9 = "Sorry, you ran out of guesses. The word was $1."
 
+        err0 = "Sorry, I did not understand your input."
+
     echo msg0 # Greet the player
 
     let n = len(secretWord)
@@ -144,6 +146,10 @@ proc hangman(secretWord: string) =
         echo msg3, availableLetters # Inform the player about the available letters
 
         let guess = readLineFromStdin(msg4).toLower() # get input from the player
+
+        if guess[0] notin Letters:
+            echo err0
+            continue # continue if guess is invalid
 
         if guess[0] in lettersGuessed:
             echo msg7, getGuessedWord(secretWord, lettersGuessed)
@@ -176,5 +182,5 @@ while true:
     except IOError: # exit when user hits ^C or ^D
         break
 
-    sleep(2000)
+    sleep(2000) # wait 2s to see the outcome
     clearTerminal()
