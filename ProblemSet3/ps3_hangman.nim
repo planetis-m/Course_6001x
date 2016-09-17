@@ -4,7 +4,7 @@
 # -----------------------------------
 # Helper code
 
-import random, rdstdin, strtabs, strutils
+import osproc, random, rdstdin, strtabs, strutils
 
 # Initializes the random number generator
 randomize()
@@ -127,18 +127,18 @@ proc hangman(secretWord: string) =
     var availableLetters = "abcdefghijklmnopqrstuvwxyz"
     var lettersGuessed: seq[char] = @[]
 
-    while mistakesMade < 8: # 
+    while mistakesMade < 8: # player is given 8 guesses
         echo "-".repeat(13)
 
         let remainingTries = 8 - mistakesMade
         echo msg2 % [$remainingTries] # Inform the player about the number of tries
         echo msg3, availableLetters # Inform the player about the available letters
 
-        let guess = readLineFromStdin(msg4).toLower() # get input from player
+        let guess = readLineFromStdin(msg4).toLower() # get input from the player
 
-        if guess[0] in lettersGuessed: # continue when player has already guessed that letter
+        if guess[0] in lettersGuessed:
             echo msg7, getGuessedWord(secretWord, lettersGuessed)
-            continue
+            continue # continue when the player has already guessed that letter
 
         lettersGuessed.add(guess[0]) # add player's guess to the guessed letters
 
@@ -148,8 +148,8 @@ proc hangman(secretWord: string) =
             echo msg6, getGuessedWord(secretWord, lettersGuessed)
             inc(mistakesMade) # player loses a guess when he guesses incorrectly
 
-        if isWordGuessed(secretWord, lettersGuessed): # break the loop when the word is found
-            break
+        if isWordGuessed(secretWord, lettersGuessed):
+            break # break the loop when the word is found
 
         availableLetters = getAvailableLetters(lettersGuessed) # update the available letters
 
@@ -159,5 +159,12 @@ proc hangman(secretWord: string) =
     else:
         echo msg9 % [$secretWord]
 
-let secretWord = chooseWord(wordlist).toLower()
-hangman(secretWord)
+while true:
+    let secretWord = chooseWord(wordlist).toLower()
+
+    try:
+        hangman(secretWord)
+    except IOError: # exit when user hits ^C or ^D
+        break
+
+    discard execCmd "sleep 2 && clear"
