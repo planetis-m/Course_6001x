@@ -4,9 +4,6 @@
 # not change each month, but instead is a constant amount that 
 # will be paid each month.
 
-# Needed for round
-import math
-
 let
     annualInterestRate = 0.2 # annual interest rate as a decimal
     monthlyInterestRate = annualInterestRate / 12.0
