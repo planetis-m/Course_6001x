@@ -3,7 +3,7 @@ Problem set, lecture code and finger excercises from the course, written in nim 
 
                                               Hello!
 
-I rewritten code from the course in [nim lang](http://nim-lang.org/) in order to learn 
+I rewritten code that I picked up in [nim lang](http://nim-lang.org/) in order to learn 
 the language better. I hope you find it useful too!
 
 ## Week 1
@@ -29,4 +29,13 @@ the language better. I hope you find it useful too!
 9. Find palindrome strings iteratively
 
 ## Problem Set 2
-Comming Up!
+1. paying the minimum
+2. paying debt off in a year
+3. using bisection search
+
+## Week 3
+1. odd tuples
+
+
+## Problem Set 3
+1. Hangman game

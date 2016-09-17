@@ -27,7 +27,7 @@ proc isIn(char: char, aStr: string): bool =
    # Otherwise the test character is larger than the middle character,
    #  so recursively search on the last half of aStr
     else:
-        return isIn(char, aStr[n div 2 + 1 .. <n]) # start is wrong
+        return isIn(char, aStr[n div 2 + 1 .. <n])
 
 doAssert isIn('a', "") == false
 doAssert isIn('a', "acfjlruxyzz") == true
