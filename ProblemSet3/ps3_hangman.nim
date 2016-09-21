@@ -11,6 +11,8 @@ randomize()
 
 const wordlist_filename = "words.txt"
 
+const Lower = {'a' .. 'z'}
+
 proc loadWords(): seq[string] =
     #
     # Returns a list of valid words. Words are strings of lowercase letters.
@@ -54,7 +56,7 @@ clearTerminal()
 # so that it can be accessed from anywhere in the program
 let wordlist = loadWords()
 
-proc isWordGuessed(secretWord: string, lettersGuessed: seq[char]): bool =
+proc isWordGuessed(secretWord, lettersGuessed: string): bool =
     #
     # secretWord: string, the word the user is guessing
     # lettersGuessed: list, what letters have been guessed so far
@@ -66,7 +68,7 @@ proc isWordGuessed(secretWord: string, lettersGuessed: seq[char]): bool =
             return false
     return true
 
-proc getGuessedWord(secretWord: string, lettersGuessed: seq[char]): string =
+proc getGuessedWord(secretWord, lettersGuessed: string): string =
     #
     # secretWord: string, the word the user is guessing
     # lettersGuessed: list, what letters have been guessed so far
@@ -80,14 +82,13 @@ proc getGuessedWord(secretWord: string, lettersGuessed: seq[char]): string =
         else:
             result.add(c)
 
-proc getAvailableLetters(lettersGuessed: seq[char]): string =
+proc getAvailableLetters(lettersGuessed: string): string =
     #
     # lettersGuessed: list, what letters have been guessed so far
     # returns: string, comprised of letters that represents what letters have not
     #   yet been guessed.
     #
     result = ""
-    const Lower = {'a' .. 'z'}
     for c in Lower:
         if c notin lettersGuessed:
             result.add(c)
@@ -136,7 +137,7 @@ proc hangman(secretWord: string) =
 
     var mistakesMade = 0
     var availableLetters = "abcdefghijklmnopqrstuvwxyz"
-    var lettersGuessed: seq[char] = @[]
+    var lettersGuessed = ""
 
     while mistakesMade < 8: # player is given 8 guesses
         echo "-".repeat(13)
@@ -147,7 +148,7 @@ proc hangman(secretWord: string) =
 
         let guess = readLineFromStdin(msg4).toLower() # get input from the player
 
-        if guess[0] notin Letters:
+        if guess[0] notin Lower:
             echo err0
             continue # continue if guess is invalid
 
@@ -180,7 +181,7 @@ while true:
     try:
         hangman(secretWord)
     except IOError: # exit when user hits ^C or ^D
-        break
+        quit()
 
     sleep(2000) # wait 2s to see the outcome
     clearTerminal()
