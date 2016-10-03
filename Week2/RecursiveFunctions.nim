@@ -47,7 +47,7 @@ proc fib*(x: int): int =
     else:
         return fib(x - 1) + fib(x - 2)
 
-proc decToBin*(num: int): string =
+proc intToBin*(num: int): string =
     #
     # num, positive integer
     #
@@ -56,7 +56,7 @@ proc decToBin*(num: int): string =
     if num == 0:
         return ""
     else:
-        return decToBin(num div 2) & $(num mod 2)
+        return intToBin(num div 2) & $(num mod 2)
 
 when isMainModule:
     doAssert mult(5, 12) == 60
@@ -66,4 +66,4 @@ when isMainModule:
     doAssert pow(2.0, 3) == 8.0
     doAssert gcd(9, 12) == 3
     doAssert fib(40) == 165580141
-    doAssert decToBin(72) == "1001000"
+    doAssert intToBin(72) == "1001000"
