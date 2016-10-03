@@ -1,5 +1,5 @@
 
-proc oddTuples[T](aArray: seq[T]): seq[T] =
+proc oddArrays[T](anArray: seq[T]): seq[T] =
     #
     # aArray: a sequence
     #
@@ -11,10 +11,10 @@ proc oddTuples[T](aArray: seq[T]): seq[T] =
     #  the result
     result = @[]
     var i = 0
-    while i < len(aArray):
-        result.add(aArray[i])
+    while i < len(anArray):
+        result.add(anArray[i])
         i += 2
 
-echo oddTuples(@[2, 3, 6, 16, 7])
-echo oddTuples(@[20, 5, 6, 20])
-echo oddTuples(@["I", "am", "a", "test", "tuple"])
+echo oddArrays(@[2, 3, 6, 16, 7])
+echo oddArrays(@[20, 5, 6, 20])
+echo oddArrays(@["I", "am", "a", "test", "tuple"])
