@@ -18,7 +18,7 @@ proc applyF_filterG(L: var seq[int], f: proc(i: int): int, g: proc(i: int): bool
     #
 
     L = lc[ x | ( x <- L, g(f(x)) ), int ]
-    return if len(L) > 0: max(L) else: -1
+    if len(L) > 0: max(L) else: -1
 
 var L = @[0, -10, 5, 6, -4]
 echo applyF_filterG(L, f, g)
