@@ -1,3 +1,4 @@
+import future
 
 proc f(i: int): int =
     i + 2
@@ -16,11 +17,7 @@ proc applyF_filterG(L: var seq[int], f: proc(i: int): int, g: proc(i: int): bool
     # Returns the largest element in the mutated L or -1 if the list is empty
     #
 
-    var L_new: seq[int] = @[]
-    for i in L:
-        if g(f(i)):
-            L_new.add(i)
-    L = L_new
+    L = lc[ x | ( x <- L, g(f(x)) ), int ]
     return if len(L) > 0: max(L) else: -1
 
 var L = @[0, -10, 5, 6, -4]
