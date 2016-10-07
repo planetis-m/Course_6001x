@@ -28,3 +28,7 @@ deep_reverse(K)
 deep_reverse(L)
 
 echo K, ' ', L
+
+var L = [[0, 1, 2], [1, 2, 3]]
+var M = [[0], [1], [2], [3], [-1]]
+var N = [[0, -1, 2, -3, 4, -5]]
