@@ -10,8 +10,8 @@ proc deep_reverse[I, J](a: var array[I, array[J, int]]) =
     # It does not return anything.
     #
 
-    for i in a:
-        i.reverse()
+    for i in 0 .. a.high:
+        a[i].reverse()
     a.reverse()
 
 
