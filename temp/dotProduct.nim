@@ -7,8 +7,7 @@ import random
 
 proc randIntList(N: static[int]): array[N, int] =
     for i in 0 .. <N:
-        let x = random(50)
-        result[i] = x
+        result[i] = random(50)
 
 proc dotProduct(listA, listB: openarray[int]): int =
     #
