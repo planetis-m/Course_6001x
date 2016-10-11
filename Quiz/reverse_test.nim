@@ -1,7 +1,7 @@
 import unittest, reverse
 
 template are_reversed(a, b: untyped) =
-    new L = a
+    var L = a
     deep_reverse(L)
     check L == b
 
