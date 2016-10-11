@@ -4,7 +4,10 @@ Problem set, lecture code and finger excercises from the course, written in nim 
                                               Hello!
 
 I rewritten code that I picked up in [nim lang](http://nim-lang.org/) in order to learn 
-the language better. I hope you find it useful too!
+the language better. I hope you find it useful!
+
+### Resources
+[Nim Manual](http://nim-lang.org/docs/manual.html)
 
 ## Week 1
 1. Guess and check for square roots
