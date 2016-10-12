@@ -1,4 +1,4 @@
-import future, sequtils
+import sequtils
 
 proc f(i: int): int =
     i + 2
