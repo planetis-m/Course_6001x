@@ -1,10 +1,10 @@
-type List = ref object
-    warm: seq[string]
+var warm: seq[string]
+warm = @["red", "yellow", "orange"]
+shallow warm
 
-var hot: List
-new hot
+var hot = warm
 
-hot.warm = @["red", "yellow", "orange"]
-hot.warm.add("pink")
+warm[2] = "red"
+warm.add("pink")
 
-echo hot[].warm
+echo hot
