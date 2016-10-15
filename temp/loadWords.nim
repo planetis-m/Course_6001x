@@ -17,6 +17,6 @@ proc load_words(): seq[string] =
 
     withFile(inFile, lyrics_filename):
         for line in lines(inFile):
-            result.add(line.split({' ', ','}))
+            result.add(line.split)
 
 let she_loves_you = load_words()
