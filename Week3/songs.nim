@@ -1,33 +1,40 @@
-import tables
+import tables, sequtils
 
 # Contains the she_loves_you sequence of strings
 include loadWords
 
-proc lyrics_to_frequencies(lyrics: seq[string]): CountTable[string] =
-    result = initCountTable[string]()
+proc lyrics_to_frequencies(lyrics: seq[string]): Table[string, int] =
+    result = initTable[string, int]()
 
     for word in lyrics:
-        result.inc(word)
+        if word in result:
+            result[word] += 1
+        else:
+            result[word] = 1
 
-proc common_words(freqs: CountTable[string], count: int): auto =
+proc most_common_words(freqs: Table[string, int]): auto =
     var words: seq[string] = @[]
-    for key, val in pairs(freqs):
-        if val == count:
+    let
+        values = toSeq(freqs.values)
+        best = max(values)
+
+    for key in keys(freqs):
+        if freqs[key] == best:
             words.add(key)
-    return (words, count)
+    return (words, best)
 
-proc words_often(freqs: var CountTable[string], minTimes: int): OrderedTable[seq[string], int] =
+proc words_often(freqs: var Table[string, int], minTimes: int): OrderedTable[seq[string], int] =
     result = initOrderedTable[seq[string], int]()
+    var done = false
+    while not done:
+        let (words, best) = most_common_words(freqs)
+        if best >= minTimes:
+            result[words] = best
+            for word in words:
+                del(freqs, word)  #remove word from dictionary
+        else:
+            done = true
 
-    # Destructive, can only iterate through freqs
-    freqs.sort()
-
-    var prev = 0
-    for key, val in pairs(freqs):
-        if val >= minTimes and val != prev:
-            let (words, best) = common_words(freqs, val)
-            prev = val
-            result.add(words, best)
 
 var beatles = lyrics_to_frequencies(she_loves_you)
 echo words_often(beatles, 5)
