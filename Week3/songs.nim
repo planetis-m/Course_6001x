@@ -9,7 +9,7 @@ proc lyrics_to_frequencies(lyrics: seq[string]): CountTable[string] =
     for word in lyrics:
         result.inc(word)
 
-#proc most_common_words(freqs: CountTable[string]): tuple[w: seq[string], b: int] =
+# proc most_common_words(freqs: CountTable[string]): tuple[w: seq[string], b: int] =
 
 
 proc words_often(freqs: var CountTable[string], minTimes: int): OrderedTable[seq[string], int] =
@@ -23,7 +23,7 @@ proc words_often(freqs: var CountTable[string], minTimes: int): OrderedTable[seq
     freqs.sort()
 
     for key, val in pairs(freqs):
-        if val >= minTimes:
+        if val >= minTimes - 1:
             if val != best:
                 result[words] = best
                 words = @[key]
@@ -32,8 +32,8 @@ proc words_often(freqs: var CountTable[string], minTimes: int): OrderedTable[seq
                 words.add(key)
 
 var beatles = lyrics_to_frequencies(she_loves_you)
-echo words_often(beatles, 4)
+echo words_often(beatles, 5)
 
 discard """ Output:
-[(['you'], 36), (['yeah'], 28), (['she'], 20), (['loves'], 13), (['know'], 11), (['be'], 10), (['and'], 8), (['that', 'glad', 'should'], 7), (['love'], 5)]
+{@[you]: 36, @[yeah]: 28, @[she]: 20, @[loves]: 13, @[know]: 11, @[be]: 10, @[and]: 8, @[glad, that, should]: 7, @[love]: 5}
 """
