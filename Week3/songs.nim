@@ -12,26 +12,24 @@ proc lyrics_to_frequencies(lyrics: seq[string]): CountTable[string] =
 #proc most_common_words(freqs: CountTable[string]): tuple[w: seq[string], b: int] =
 
 
-proc words_often(freqs: var CountTable[string], minTimes: int): seq[tuple[w: seq[string], b: int]] =
-    result = @[]
+proc words_often(freqs: var CountTable[string], minTimes: int): OrderedTable[seq[string], int] =
+    result = initOrderedTable[seq[string], int]()
 
-    var words: seq[string] = @[]
-    var previous: tuple[w: seq[string], b: int]
-    previous.b = largest(freqs).val
+    var
+        words: seq[string] = @[]
+        best = largest(freqs).val
 
     # Destructive, can only iterate through freqs
     freqs.sort()
 
     for key, val in pairs(freqs):
         if val >= minTimes:
-            if val != previous.b:
-                result.add(previous)
+            if val != best:
+                result[words] = best
                 words = @[key]
-                previous.b = val
+                best = val
             else:
                 words.add(key)
-
-            previous.w = words
 
 var beatles = lyrics_to_frequencies(she_loves_you)
 echo words_often(beatles, 4)
