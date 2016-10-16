@@ -9,7 +9,11 @@ proc toCountTable[A](pairs: openArray[(A, int)]): CountTable[A] =
     for key, val in items(pairs): result[key] = val
 
 proc notEqualHands(hand1, hand2: CountTable[char]): bool =
-    toSeq(hand1.pairs) != toSeq(hand2.pairs)
+    let seq1 = toSeq(hand1.pairs)
+    let seq2 = toSeq(hand2.pairs)
+    if len(seq1) != len(seq2): result = true
+    for i in seq1:
+        if i notin seq2: result = true
 
 #
 # Test code
