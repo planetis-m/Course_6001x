@@ -6,7 +6,8 @@ import ps4a
 proc toCountTable[A](pairs: openArray[(A, int)]): CountTable[A] =
     ## creates a new hash table that contains the given `pairs`.
     result = initCountTable[A](rightSize(pairs.len))
-    for key, val in items(pairs): result[key] = val
+    for key, val in items(pairs):
+        if val > 0: result[key] = val
 
 proc notEqualHands(hand1, hand2: CountTable[char]): bool =
     let seq1 = toSeq(hand1.pairs)
@@ -135,18 +136,17 @@ proc test_isValidWord(wordList: seq[string]) =
             echo "FAILURE: test_isValidWord()"
 
             if notEqualHands(handCopy, handOrig):
-                echo "\tTesting word", word, "for a second time - be sure you're not modifying hand."
+                echo "\tTesting word ", word, " for a second time - be sure you're not modifying hand."
                 echo "\tAt this point, hand ought to be", handOrig, "but it is", handCopy
 
             else:
-                echo "\tTesting word", word, "for a second time - have you modified wordList?"
+                echo "\tTesting word ", word, " for a second time - have you modified wordList?"
                 let wordInWL = word in wordList
                 echo "The word", word, "should be in wordList - is it?", wordInWL
 
             echo "\tExpected true, but got false for word: '", word, "' and hand:", handCopy
 
             failure = true
-
 
     # test 2
     block test2:
