@@ -47,11 +47,10 @@ proc test_updateHand() =
         let word = "quail"
 
         let hand2 = updateHand(handCopy, word)
-        let expectedHand1 = {'l':1, 'm':1}.toCountTable
-        let expectedHand2 = {'a':0, 'q':0, 'l':1, 'm':1, 'u':0, 'i':0}.toCountTable
-        if notEqualHands(hand2, expectedHand1) and notEqualHands(hand2, expectedHand2):
+        let expectedHand = {'l':1, 'm':1}.toCountTable
+        if notEqualHands(hand2, expectedHand):
             echo "FAILURE: test_updateHand('", word, "', ", $handOrig, ")"
-            echo "\tReturned: ", hand2, "\n\t-- but expected:", expectedHand1, "or", expectedHand2
+            echo "\tReturned: ", hand2, "\n\t-- but expected:", expectedHand
 
             return # exit function
         if notEqualHands(handCopy, handOrig):
@@ -69,11 +68,10 @@ proc test_updateHand() =
         let word = "evil"
 
         let hand2 = updateHand(handCopy, word)
-        let expectedHand1 = {'v':1, 'n':1, 'l':1}.toCountTable
-        let expectedHand2 = {'e':0, 'v':1, 'n':1, 'i':0, 'l':1}.toCountTable
-        if notEqualHands(hand2, expectedHand1) and notEqualHands(hand2, expectedHand2):
+        let expectedHand = {'v':1, 'n':1, 'l':1}.toCountTable
+        if notEqualHands(hand2, expectedHand):
             echo "FAILURE: test_updateHand('", word, "', ", $handOrig, ")"
-            echo "\tReturned: ", hand2, "\n\t-- but expected:", expectedHand1, "or", expectedHand2
+            echo "\tReturned: ", hand2, "\n\t-- but expected:", expectedHand
 
             return # exit function
 
@@ -92,11 +90,10 @@ proc test_updateHand() =
         let word = "hello"
 
         let hand2 = updateHand(handCopy, word)
-        let expectedHand1 = initCountTable[char]()
-        let expectedHand2 = {'h': 0, 'e': 0, 'l': 0, 'o': 0}.toCountTable
-        if notEqualHands(hand2, expectedHand1) and notEqualHands(hand2, expectedHand2):
+        let expectedHand = initCountTable[char]()
+        if notEqualHands(hand2, expectedHand):
             echo "FAILURE: test_updateHand('", word, "', ", $handOrig, ")"
-            echo "\tReturned: ", hand2, "\n\t-- but expected:", expectedHand1, "or", expectedHand2
+            echo "\tReturned: ", hand2, "\n\t-- but expected:", expectedHand
 
             return # exit function
 
@@ -208,14 +205,14 @@ proc test_isValidWord(wordList: seq[string]) =
 
 
 let wordList = loadWords()
-echo "-".repeat(20)
+echo "-".repeat(40)
 echo "Testing getWordScore..."
 test_getWordScore()
-echo "-".repeat(20)
+echo "-".repeat(40)
 echo "Testing updateHand..."
 test_updateHand()
-echo "-".repeat(20)
+echo "-".repeat(40)
 echo "Testing isValidWord..."
 test_isValidWord(wordList)
-echo "-".repeat(20)
+echo "-".repeat(40)
 echo "All done!"
