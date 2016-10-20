@@ -209,7 +209,7 @@ proc calculateHandlen(hand: CountTable[char]): int =
     for k in hand.keys():
         result += hand[k]
 
-proc playHand(hand: var CountTable[char], wordList: seq[string], n: int) =
+proc playHand(hand: CountTable[char], wordList: seq[string], n: int) =
     #
     # Allows the user to play the given hand, as follows:
     #
@@ -230,6 +230,7 @@ proc playHand(hand: var CountTable[char], wordList: seq[string], n: int) =
     #   wordList: list of lowercase strings
     #   n: integer (HAND_SIZE; i.e., hand size required for additional points)
     #
+    var hand = hand
     var word: string
     # Keep track of the total score
     var totalScore = 0
@@ -251,7 +252,8 @@ proc playHand(hand: var CountTable[char], wordList: seq[string], n: int) =
             # If the word is not valid:
             if not isValidWord(word, hand, wordList):
                 # Reject invalid word (print a message followed by a blank line)
-                echo err0, "\n"
+                echo err0
+                echo ""
 
             # Otherwise (the word is valid):
             else:
@@ -265,8 +267,10 @@ proc playHand(hand: var CountTable[char], wordList: seq[string], n: int) =
     # Game is over (user entered a '.' or ran out of letters), so tell user the total score
     if word == ".":
         echo msg5 % [$totalScore]
+        echo ""
     else:
         echo msg6 % [$totalScore]
+        echo ""
 
 proc playGame(wordList: seq[string]) =
     #
