@@ -1,14 +1,6 @@
 import tables, strutils
 import ps4a
 
-# Helper code
-
-proc toCountTable[A](pairs: openArray[(A, int)]): CountTable[A] =
-    ## creates a new hash table that contains the given `pairs`.
-    result = initCountTable[A](rightSize(pairs.len))
-    for key, val in items(pairs):
-        if val > 0: result[key] = val
-
 #
 # Test code
 # You don't need to understand how this test code works (but feel free to look it over!)
@@ -26,7 +18,7 @@ proc test_getWordScore() =
         let score = getWordScore(word, n)
         if score != words[(word, n)]:
             echo "FAILURE: test_getWordScore()"
-            echo "\tExpected ", words[(word, n)], " points but got '", $score, "' for word '", word, "', n=", $n
+            echo "\tExpected ", $words[(word, n)], " points but got '", $score, "' for word '", $word, "', n=", n
             failure = true
     if not failure:
         echo "SUCCESS: test_getWordScore()"
@@ -47,15 +39,15 @@ proc test_updateHand() =
         let hand2 = updateHand(handCopy, word)
         let expectedHand = {'l':1, 'm':1}.toCountTable
         if hand2 != expectedHand:
-            echo "FAILURE: test_updateHand('", word, "', ", $handOrig, ")"
-            echo "\tReturned: ", hand2, "\n\t-- but expected: ", expectedHand
+            echo "FAILURE: test_updateHand('", $word, "', ", $handOrig, ")"
+            echo "\tReturned: ", $hand2, "\n\t-- but expected: ", $expectedHand
 
             return # exit function
         if handCopy != handOrig:
-            echo "FAILURE: test_updateHand('", word, "', ", $handOrig, ")"
-            echo "\tOriginal hand was ", handOrig
+            echo "FAILURE: test_updateHand('", $word, "', ", $handOrig, ")"
+            echo "\tOriginal hand was ", $handOrig
             echo "\tbut implementation of updateHand mutated the original hand!"
-            echo "\tNow the hand looks like this: ", handCopy
+            echo "\tNow the hand looks like this: ", $handCopy
 
             return # exit function
 
@@ -68,16 +60,16 @@ proc test_updateHand() =
         let hand2 = updateHand(handCopy, word)
         let expectedHand = {'v':1, 'n':1, 'l':1}.toCountTable
         if hand2 != expectedHand:
-            echo "FAILURE: test_updateHand('", word, "', ", $handOrig, ")"
-            echo "\tReturned: ", hand2, "\n\t-- but expected: ", expectedHand
+            echo "FAILURE: test_updateHand('", $word, "', ", $handOrig, ")"
+            echo "\tReturned: ", $hand2, "\n\t-- but expected: ", $expectedHand
 
             return # exit function
 
         if handCopy != handOrig:
-            echo "FAILURE: test_updateHand('", word, "', ", $handOrig, ")"
-            echo "\tOriginal hand was ", handOrig
+            echo "FAILURE: test_updateHand('", $word, "', ", $handOrig, ")"
+            echo "\tOriginal hand was ", $handOrig
             echo "\tbut implementation of updateHand mutated the original hand!"
-            echo "\tNow the hand looks like this: ", handCopy
+            echo "\tNow the hand looks like this: ", $handCopy
 
             return # exit function
 
@@ -90,16 +82,16 @@ proc test_updateHand() =
         let hand2 = updateHand(handCopy, word)
         let expectedHand = initCountTable[char]()
         if hand2 != expectedHand:
-            echo "FAILURE: test_updateHand('", word, "', ", $handOrig, ")"
-            echo "\tReturned: ", hand2, "\n\t-- but expected: ", expectedHand
+            echo "FAILURE: test_updateHand('", $word, "', ", $handOrig, ")"
+            echo "\tReturned: ", $hand2, "\n\t-- but expected: ", $expectedHand
 
             return # exit function
 
         if handCopy != handOrig:
-            echo "FAILURE: test_updateHand('", word, "', ", $handOrig, ")"
-            echo "\tOriginal hand was ", handOrig
+            echo "FAILURE: test_updateHand('", $word, "', ", $handOrig, ")"
+            echo "\tOriginal hand was ", $handOrig
             echo "\tbut implementation of updateHand mutated the original hand!"
-            echo "\tNow the hand looks like this: ", handCopy
+            echo "\tNow the hand looks like this: ", $handCopy
 
             return # exit function
 
@@ -120,7 +112,7 @@ proc test_isValidWord(wordList: seq[string]) =
 
         if not isValidWord(word, handCopy, wordList):
             echo "FAILURE: test_isValidWord()"
-            echo "\tExpected true, but got false for word: '", word, "' and hand: ", handOrig
+            echo "\tExpected true, but got false for word: '", $word, "' and hand: ", $handOrig
 
             failure = true
 
@@ -129,15 +121,15 @@ proc test_isValidWord(wordList: seq[string]) =
             echo "FAILURE: test_isValidWord()"
 
             if handCopy != handOrig:
-                echo "\tTesting word ", word, " for a second time - be sure you're not modifying hand."
-                echo "\tAt this point, hand ought to be ", handOrig, " but it is ", handCopy
+                echo "\tTesting word ", $word, " for a second time - be sure you're not modifying hand."
+                echo "\tAt this point, hand ought to be ", $handOrig, " but it is ", $handCopy
 
             else:
-                echo "\tTesting word ", word, " for a second time - have you modified wordList?"
+                echo "\tTesting word ", $word, " for a second time - have you modified wordList?"
                 let wordInWL = word in wordList
-                echo "The word ", word, " should be in wordList - is it? ", wordInWL
+                echo "The word ", $word, " should be in wordList - is it? ", $wordInWL
 
-            echo "\tExpected true, but got false for word: '", word, "' and hand: ", handCopy
+            echo "\tExpected true, but got false for word: '", $word, "' and hand: ", $handCopy
 
             failure = true
 
@@ -148,7 +140,7 @@ proc test_isValidWord(wordList: seq[string]) =
 
         if  isValidWord(word, hand, wordList):
             echo "FAILURE: test_isValidWord()"
-            echo "\tExpected false, but got true for word: '", word, "' and hand: ", hand
+            echo "\tExpected false, but got true for word: '", $word, "' and hand: ", $hand
 
             failure = true
 
@@ -159,7 +151,7 @@ proc test_isValidWord(wordList: seq[string]) =
 
         if  not isValidWord(word, hand, wordList):
             echo "FAILURE: test_isValidWord()"
-            echo "\tExpected true, but got false for word: '", word, "' and hand: ", hand
+            echo "\tExpected true, but got false for word: '", $word, "' and hand: ", $hand
 
             failure = true
 
@@ -170,7 +162,7 @@ proc test_isValidWord(wordList: seq[string]) =
 
         if  isValidWord(word, hand, wordList):
             echo "FAILURE: test_isValidWord()"
-            echo "\tExpected false, but got true for word: '", word, "' and hand: ", hand
+            echo "\tExpected false, but got true for word: '", $word, "' and hand: ", $hand
 
             failure = true
 
@@ -181,7 +173,7 @@ proc test_isValidWord(wordList: seq[string]) =
 
         if  not isValidWord(word, hand, wordList):
             echo "FAILURE: test_isValidWord()"
-            echo "\tExpected true, but got false for word: '", word, "' and hand: ", hand
+            echo "\tExpected true, but got false for word: '", $word, "' and hand: ", $hand
 
             failure = true
 
@@ -192,7 +184,7 @@ proc test_isValidWord(wordList: seq[string]) =
 
         if  isValidWord(word, hand, wordList):
             echo "FAILURE: test_isValidWord()"
-            echo "\tExpected false, but got true for word: '", word, "' and hand: ", hand
+            echo "\tExpected false, but got true for word: '", $word, "' and hand: ", $hand
             echo "\t(If this is the only failure, make sure isValidWord() isn't mutating its inputs)"
 
             failure = true

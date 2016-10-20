@@ -70,10 +70,10 @@ proc getFrequencyDict*(sequence: string): CountTable[char] =
 proc `==`*[A](s, t: CountTable[A]): bool =
     let seq1 = toSeq(s.pairs)
     let seq2 = toSeq(t.pairs)
-    if len(seq1) != len(seq2): return false
-    for i in seq1:
-        if i notin seq2: return false
-    return true
+    if len(seq1) == len(seq2):
+        for i in seq1:
+            if i notin seq2: return false
+        return true
 
 proc toCountTable*[A](pairs: openArray[(A, int)]): CountTable[A] =
     ## creates a new hash table that contains the given `pairs`.
@@ -183,11 +183,14 @@ proc isValidWord*(word: string, hand: CountTable[char], wordList: seq[string]): 
     # hand: dictionary (string -> int)
     # wordList: list of lowercase strings
     #
-    let handExpected = getFrequencyDict(word)
-    if hand != handExpected:
-        return false
-    
-
+    if word in wordList:
+        let lettersExpected = getFrequencyDict(word)
+        for key, val in lettersExpected.pairs():
+            if not hand.hasKey(key):
+                return false
+            if hand.getOrDefault(key) < val:
+                return false
+        return true
 
 proc playGame(wordList: seq[string]) =
     #
