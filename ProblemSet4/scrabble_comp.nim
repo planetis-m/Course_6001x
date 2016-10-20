@@ -12,25 +12,6 @@ const
     err0 = "This is a terrible error! I need to check my own code!"
     err1 = "Invalid command."
 
-proc isValidWord(word: string, hand: CountTable[char], wordList: seq[string]): bool =
-    #
-    # Returns True if word is in the wordList and is entirely
-    # composed of letters in the hand. Otherwise, returns False.
-    #
-    # Does not mutate hand or wordList.
-    #
-    # word: string
-    # hand: dictionary (string -> int)
-    # wordList: list of lowercase strings
-    #
-    let lettersExpected = getFrequencyDict(word)
-    for key, val in lettersExpected.pairs():
-        if not hand.hasKey(key):
-            return false
-        if hand.getOrDefault(key) < val:
-            return false
-    return true
-
 #
 #
 # Computer chooses a word

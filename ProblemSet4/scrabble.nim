@@ -1,6 +1,6 @@
 # The 6.00 Word Game
 
-import os, random, rdstdin, sequtils, strtabs, strutils, tables
+import algorithm, os, random, rdstdin, sequtils, strtabs, strutils, tables
 
 const
     vowels = "aeiou"
@@ -73,6 +73,12 @@ proc getFrequencyDict*(sequence: string): CountTable[char] =
         result.inc(x)
 
 # Procedures used by test_ps4.nim
+
+proc contains*(a: seq[string], item: string): bool {.inline.} =
+    # in operator calls the procedure contains, which
+    # in its turn is a shortcut to find(a, item) >= 0
+    # overload contains to use binary search for wordlist which is ordered
+    return binarySearch(a, item) >= 0
 
 proc `==`*[A](s, t: CountTable[A]): bool =
     let seq1 = toSeq(s.pairs)
