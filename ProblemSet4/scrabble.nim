@@ -5,7 +5,7 @@ import os, random, rdstdin, sequtils, strtabs, strutils, tables
 const
     vowels = "aeiou"
     consonants = "bcdfghjklmnpqrstvwxyz"
-    hand_size = 7
+    hand_size* = 7
 
 const scrabble_letter_values = {
     'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1,
@@ -112,7 +112,7 @@ proc getWordScore*(word: string, n: int): int =
     if len(word) == n:
         result += 50
 
-proc displayHand(hand: CountTable[char]): string =
+proc displayHand*(hand: CountTable[char]): string =
     #
     # Displays the letters currently in the hand.
     #
@@ -129,7 +129,7 @@ proc displayHand(hand: CountTable[char]): string =
         for i in 0 .. <times:
             result.add(letter & ' ')
 
-proc dealHand(n: int): CountTable[char] =
+proc dealHand*(n: int): CountTable[char] =
     #
     # Returns a random hand containing n lowercase letters.
     # At least n/3 the letters in the hand should be VOWELS.
@@ -198,7 +198,7 @@ proc isValidWord*(word: string, hand: CountTable[char], wordList: seq[string]): 
                 return false
         return true
 
-proc calculateHandlen(hand: CountTable[char]): int =
+proc calculateHandlen*(hand: CountTable[char]): int =
     #
     # Returns the length (number of letters) in the current hand.
     #
@@ -209,7 +209,7 @@ proc calculateHandlen(hand: CountTable[char]): int =
     for k in hand.keys():
         result += hand[k]
 
-proc playHand(hand: CountTable[char], wordList: seq[string], n: int) =
+proc playHand*(hand: CountTable[char], wordList: seq[string], n: int) =
     #
     # Allows the user to play the given hand, as follows:
     #
@@ -258,8 +258,9 @@ proc playHand(hand: CountTable[char], wordList: seq[string], n: int) =
             # Otherwise (the word is valid):
             else:
                 # Tell the user how many points the word earned, and the updated total score, in one line followed by a blank line
-                totalScore += getWordScore(word, n)
-                echo msg4 % [$word, $getWordScore(word, n), $totalScore]
+                let score = getWordScore(word, n)
+                totalScore += score
+                echo msg4 % [$word, $score, $totalScore]
                 echo ""
                 # Update the hand
                 hand = updateHand(hand, word)
