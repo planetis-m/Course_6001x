@@ -1,5 +1,5 @@
 import tables, strutils
-import ps4a
+import scrabble
 
 #
 # Test code
