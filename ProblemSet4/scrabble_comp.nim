@@ -1,6 +1,10 @@
 import rdstdin, strtabs, strutils, tables
 import scrabble
 
+include utils
+include rewrites
+include funcs
+
 #
 #
 # Computer chooses a word
