@@ -1,10 +1,8 @@
 import tables, math
 
 proc avg(grades: seq[float]): float =
-    try:
-        return sum(grades) / len(grades).float
-    except:
-        echo "No grades data"
+    result = sum(grades) / len(grades).float
+    if result != result:
         return 0.0
 
 proc get_stats(class_list: Table[seq[string], seq[float]]): Table[seq[string], float] =
