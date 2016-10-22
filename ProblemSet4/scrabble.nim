@@ -13,18 +13,6 @@ const scrabble_letter_values = {
     's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10
 }.toTable
 
-const
-    msg0 = "Enter n to deal a new hand, r to replay the last hand, or e to end game: "
-    msg1 = "You have not played a hand yet. Please play a new hand first!"
-    msg2 = "Current Hand: "
-    msg3 = "Enter word, or a . to indicate that you are finished: "
-    msg4 = "$1 earned $2 points. Total: $3 points"
-    msg5 = "Goodbye! Total score: $1 points."
-    msg6 = "Run out of letters. Total score: $1 points."
-
-    err0 = "Invalid word, please try again."
-    err1 = "Invalid command."
-
 # Initializes the random number generator
 randomize()
 
@@ -243,10 +231,10 @@ proc playHand*(hand: CountTable[char], wordList: seq[string], n: int) =
     # As long as there are still letters left in the hand:
     while calculateHandlen(hand) > 0:
         # Display the hand
-        echo msg2, displayHand(hand)
+        echo "Current Hand: ", displayHand(hand)
 
         # Ask user for input
-        word = readLineFromStdin(msg3)
+        word = readLineFromStdin("Enter word, or a . to indicate that you are finished: ")
 
         # If the input is a single period:
         if word == ".":
@@ -258,7 +246,7 @@ proc playHand*(hand: CountTable[char], wordList: seq[string], n: int) =
             # If the word is not valid:
             if not isValidWord(word, hand, wordList):
                 # Reject invalid word (print a message followed by a blank line)
-                echo err0
+                echo "Invalid word, please try again."
                 echo ""
 
             # Otherwise (the word is valid):
@@ -266,17 +254,17 @@ proc playHand*(hand: CountTable[char], wordList: seq[string], n: int) =
                 # Tell the user how many points the word earned, and the updated total score, in one line followed by a blank line
                 let score = getWordScore(word, n)
                 totalScore += score
-                echo msg4 % [$word, $score, $totalScore]
+                echo "$1 earned $2 points. Total: $3 points" % [$word, $score, $totalScore]
                 echo ""
                 # Update the hand
                 hand = updateHand(hand, word)
 
     # Game is over (user entered a '.' or ran out of letters), so tell user the total score
     if word == ".":
-        echo msg5 % [$totalScore]
+        echo "Goodbye! Total score: $1 points." % [$totalScore]
         echo ""
     else:
-        echo msg6 % [$totalScore]
+        echo "Run out of letters. Total score: $1 points." % [$totalScore]
         echo ""
 
 proc playGame(wordList: seq[string]) =
@@ -293,17 +281,17 @@ proc playGame(wordList: seq[string]) =
     #
     var hand: CountTable[char]
     while true:
-        let choice = readLineFromStdin(msg0)
+        let choice = readLineFromStdin("Enter n to deal a new hand, r to replay the last hand, or e to end game: ")
         if choice == "n":
             hand = dealHand(hand_size)
             playHand(hand, wordList, hand_size)
         elif choice == "r":
             if len(hand) == 0:
-                echo msg1
+                echo "You have not played a hand yet. Please play a new hand first!"
             else:
                 playHand(hand, wordList, hand_size)
         elif choice != "e":
-            echo err1
+            echo "Invalid command."
         else:
             break
 

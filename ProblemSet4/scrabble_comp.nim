@@ -1,17 +1,6 @@
 import rdstdin, strtabs, strutils, tables
 import scrabble
 
-const
-    msg0 = "Current Hand: "
-    msg1 = "$1 earned $2 points. Total: $3 points"
-    msg2 = "Total score: $1 points."
-    msg3 = "Enter u to have yourself play, c to have the computer play: "
-    msg4 = "Enter n to deal a new hand, r to replay the last hand, or e to end game: "
-    msg5 = "You have not played a hand yet. Please play a new hand first!"
-
-    err0 = "This is a terrible error! I need to check my own code!"
-    err1 = "Invalid command."
-
 #
 #
 # Computer chooses a word
@@ -79,7 +68,7 @@ proc compPlayHand(hand: CountTable[char], wordList: seq[string], n: int) =
     # As long as there are still letters left in the hand:
     while calculateHandlen(hand) > 0:
         # Display the hand
-        echo msg0, displayHand(hand)
+        echo "Current Hand: ", displayHand(hand)
         # computer's word
         let word = compChooseWord(hand, wordList, n)
         # If the input is a single period:
@@ -91,19 +80,19 @@ proc compPlayHand(hand: CountTable[char], wordList: seq[string], n: int) =
         else:
             # If the word is not valid:
             if not isValidWord(word, hand, wordList):
-                echo err0
+                echo "This is a terrible error! I need to check my own code!"
                 break
             # Otherwise (the word is valid):
             else:
                 # Tell the user how many points the word earned, and the updated total score 
                 let score = getWordScore(word, n)
                 totalScore += score
-                echo msg1 % [$word, $score, $totalScore]
+                echo "$1 earned $2 points. Total: $3 points" % [$word, $score, $totalScore]
                 echo ""
                 # Update hand and show the updated hand to the user
                 hand = updateHand(hand, word)
     # Game is over (user entered a '.' or ran out of letters), so tell user the total score
-    echo msg2 % [$totalScore]
+    echo "Total score: $1 points." % [$totalScore]
 
 #
 # Problem #6: Playing a game
@@ -136,7 +125,7 @@ proc playGame(wordList: seq[string]) =
     proc playerChoice() =
         var player: string
         while player != "u" or player != "c":
-            player = readLineFromStdin(msg3)
+            player = readLineFromStdin("Enter u to have yourself play, c to have the computer play: ")
             if player == "u":
                 playHand(hand, wordList, hand_size)
                 break
@@ -144,20 +133,20 @@ proc playGame(wordList: seq[string]) =
                 compPlayHand(hand, wordList, hand_size)
                 break
             else:
-                echo err1
+                echo "Invalid command."
 
     while true:
-        let choice = readLineFromStdin(msg4)
+        let choice = readLineFromStdin("Enter n to deal a new hand, r to replay the last hand, or e to end game: ")
         if choice == "n":
             hand = dealHand(hand_size)
             playerChoice()
         elif choice == "r":
             if len(hand) == 0:
-                echo msg5
+                echo "You have not played a hand yet. Please play a new hand first!"
             else:
                 playerChoice()
         elif choice != "e":
-            echo err1
+            echo "Invalid command."
         else:
             break
 
