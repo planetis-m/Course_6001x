@@ -16,9 +16,9 @@ proc `$`(c: Coordinate): string =
     "<" & $c.x & ", " & $c.y & ">"
 
 proc sub(a, b: Coordinate): Coordinate =
-    (a.x - b.x, a.y - b.y)
+    Coordinate(x: a.x - b.x, y: a.y - b.y)
 
 echo c.distance(origin)
 echo c
 echo c is Coordinate
-echo sub(c - origin)
+echo sub(c, origin)
