@@ -15,10 +15,25 @@ proc distance(a, b: Coordinate): float =
 proc `$`(c: Coordinate): string =
     "<" & $c.x & ", " & $c.y & ">"
 
-proc sub(a, b: Coordinate): Coordinate =
+proc `-`(a, b: Coordinate): Coordinate =
     Coordinate(x: a.x - b.x, y: a.y - b.y)
 
 echo c.distance(origin)
 echo c
 echo c is Coordinate
-echo sub(c, origin)
+echo c - origin
+
+type Coord = tuple[x, y: float]
+
+let d: Coord = (x: 6.0, y: 9.0)
+let orig: Coord = (x: 0.0, y: 0.0)
+
+proc `$`(c: Coord): string =
+    "<" & $c.x & ", " & $c.y & ">"
+
+proc `-`(a, b: Coord): Coord =
+    (x: a.x - b.x, y: a.y - b.y)
+
+echo d
+echo d is Coord
+echo d - orig
