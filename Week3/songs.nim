@@ -7,7 +7,7 @@ proc lyrics_to_frequencies(lyrics: seq[string]): Table[string, int] =
     result = initTable[string, int]()
 
     for word in lyrics:
-        result[word] = result.mgetOrPut(word, 0) + 1
+        result.mgetOrPut(word, 0) += 1
 
 proc most_common_words(freqs: Table[string, int]): auto =
     var words: seq[string] = @[]
