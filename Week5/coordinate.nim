@@ -37,3 +37,21 @@ proc `-`(a, b: Coord): Coord =
 echo d
 echo d is Coord
 echo d - orig
+
+type CoordRef = ref tuple[x, y: float]
+
+let e = new CoordRef
+let g = new CoordRef
+
+e[] = (x: 5.0, y: 8.0)
+g[] = (x: 0.0, y: 0.0)
+
+proc `$`(c: CoordRef): string =
+    "<" & $c[].x & ", " & $c[].y & ">"
+
+proc `-`(a, b: CoordRef): CoordRef =
+    new(result)
+    result[] = (x: a[].x - b[].x, y: a[].y - b[].y)
+
+echo e
+echo e - g
