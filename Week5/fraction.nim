@@ -1,5 +1,9 @@
-type Fraction = tuple[
-    numer, denom: int]
+type Fraction = object
+    numer, denom: int
+
+proc initFraction(a, b: int): Fraction =
+    result.numer = a
+    result.denom = b
 
 proc `$`(f: Fraction): string =
     $f.numer & "/" & $f.denom
@@ -20,15 +24,15 @@ proc toDecimal(f: Fraction): float =
     f.numer / f.denom
 
 
-let oneHalf: Fraction = (1, 2)
-let twoThirds: Fraction = (2, 3)
-let fourSixths: Fraction = (4, 6)
+let oneHalf = initFraction(1, 2)
+let twoThirds = initFraction(2, 3)
+let fourSixths = initFraction(4, 6)
 
 echo oneHalf
 echo twoThirds.denom
 echo twoThirds == fourSixths
 
 echo oneHalf + twoThirds
-let threeQuarters: Fraction = (numer: 3, denom: 4)
+let threeQuarters = Fraction(numer: 3, denom: 4)
 
 echo threeQuarters.toDecimal()
