@@ -1,38 +1,40 @@
-type Fraction = object
-    numer, denom: int
+type
+    Fraction = object
+        numerator, denominator: int
+    FractionRef = ref Fraction
 
 proc initFraction(a, b: int): Fraction =
-    result.numer = a
-    result.denom = b
+    result.numerator = a
+    result.denominator = b
 
 proc `$`(f: Fraction): string =
-    $f.numer & "/" & $f.denom
+    $f.numerator & "/" & $f.denominator
 
 proc `+`(a, b: Fraction): Fraction =
-    result.numer = a.numer * b.denom + a.denom * b.numer
-    result.denom = a.denom * b.denom
+    result = initFraction(a.numerator * b.denominator + a.denominator * b.numerator,
+        a.denominator * b.denominator)
 
 proc `-`(a, b: Fraction): Fraction =
-    result.numer = a.numer * b.denom - a.denom * b.numer
-    result.denom = a.denom * b.denom
+    result = initFraction(a.numerator * b.denominator - a.denominator * b.numerator,
+        a.denominator * b.denominator)
 
 proc `==`(a, b: Fraction): bool =
-    a.numer * b.denom == b.numer * a.denom and 
-        a.denom * b.denom == b.denom * a.denom
+    a.numerator * b.denominator == b.numerator * a.denominator
 
 proc toDecimal(f: Fraction): float =
-    f.numer / f.denom
+    f.numerator / f.denominator
 
 
-let oneHalf = initFraction(1, 2)
-let twoThirds = initFraction(2, 3)
-let fourSixths = initFraction(4, 6)
+when isMainModule:
+    let oneHalf = initFraction(1, 2)
+    let twoThirds = initFraction(2, 3)
+    let fourSixths = initFraction(4, 6)
 
-echo oneHalf
-echo twoThirds.denom
-echo twoThirds == fourSixths
+    echo oneHalf
+    echo twoThirds.denominator
+    echo twoThirds == fourSixths
 
-echo oneHalf + twoThirds
-let threeQuarters = Fraction(numer: 3, denom: 4)
+    echo oneHalf + twoThirds
+    let threeQuarters = Fraction(numerator: 3, denominator: 4)
 
-echo threeQuarters.toDecimal()
+    echo threeQuarters.toDecimal()
