@@ -1,14 +1,10 @@
-import times, strutils, random
+import times, strutils
 
-proc randStr(size: int): string =
-    result = ""
-    # English lower-case letters are 25
-    # but random returns in range 0..max-1
-    for i in 0 .. size - 1:
-        let x = chr(random(26) + 97)
-        result.add(x)
+template times(x: typed, y: untyped): untyped =
+    for i in 1 .. x:
+        y
 
-let s = randStr(1_000_000)
+let s = "obobbbobbsoboooboobobbobobahoboboobobomobobo"
 let key = "bob"
 
 proc find(s, key: string): int =
@@ -31,9 +27,10 @@ proc find(s, key: string): int =
         inc(i, a[s[i + m]])
 
 let start = cpuTime()
-let result = find(s, key)
+1_000_000.times:
+    discard find(s, key)
 let duration = cpuTime() - start
 
-let timeStr = formatFloat(duration * 1000, ffDecimal, precision = 3)
+let timeStr = formatFloat(duration, ffDecimal, precision = 3)
 
-echo "Number of times bob occurs is: ", $result, ". Found in ", timeStr, " ms."
+echo "Number of times bob occurs is: plenty. Found in ", timeStr, " s."
