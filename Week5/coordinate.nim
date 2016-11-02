@@ -5,6 +5,9 @@ type Coordinate = ref object
     y: float
 
 
+proc newCoordinate(x, y: float): Coordinate =
+    result = Coordinate(x: x, y: y)
+
 proc distance(a, b: Coordinate): float =
     let x_diff_sq = pow(a.x - b.x, 2)
     let y_diff_sq = pow(a.y - b.y, 2)
@@ -14,14 +17,11 @@ proc `$`(c: Coordinate): string =
     "<" & $c.x & ", " & $c.y & ">"
 
 proc `-`(a, b: Coordinate): Coordinate =
-    result = Coordinate(x: a.x - b.x, y: a.y - b.y)
+    result = newCoordinate(a.x - b.x, a.y - b.y)
 
 
-let c = Coordinate(x: 3, y: 4)
-
-let origin = new Coordinate
-origin.x = 0
-origin.y = 0
+let c = newCoordinate(3, 4)
+let origin = newCoordinate(0, 0)
 
 echo c.distance(origin)
 echo c
