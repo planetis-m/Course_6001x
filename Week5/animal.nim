@@ -1,22 +1,72 @@
-import oopmacro
 
-class Animal of RootObj:
-  var age: int
-  var name: string
+type
+  Animal = ref object of RootObj
+    age: int
+    name: string
 
-  method get_age: int = this.age
-  method get_name: string = this.name
-  method set_age(newage: int) = this.age = newage
-  method set_name(newname: string) = this.name = newname
-  method `$`: string = "animal:" & this.name & ":" & $this.age
+  Cat = ref object of Animal
+  Rabbit = ref object of Animal
+  Person = ref object of Animal
+    friends: seq[string]
 
-class Cat of Animal:
-  discard
-class Rabbit of Animal:
-  discard
-class Person of Animal:
-  discard
+method get_age(self: Animal): int {.base.} =
+  result = self.age
+
+method get_name(self: Animal): string {.base.} =
+  result = self.name
+
+method set_age(self: Animal, newage: int) {.base.} =
+  self.age = newage
+
+method set_name(self: Animal, newname: string) {.base.} =
+  self.name = newname
+
+method `$`(self: Animal): string {.base.} =
+  result = "animal:" & self.name & ":" & $self.age
+
+method speak(self: Animal) {.base.} =
+  echo ""
+
+method speak(self: Cat) =
+  echo "Meow"
+
+method `$`(self: Cat): string =
+  result = "cat:" & self.name & ":" & $self.age
+
+method speak(self: Rabbit) =
+  echo "Meep"
+
+method `$`(self: Rabbit): string =
+  result = "rabbit:" & self.name & ":" & $self.age
+
+method speak(self: Person) =
+  echo "Hello"
+
+method `$`(self: Person): string =
+  result = "person:" & self.name & ":" & $self.age
+
+method get_friends(self: Person): seq[string] {.base.} =
+  result = self.friends
+
+method add_friend(self: Person, fname: string) {.base.} =
+  if isNil(self.friends): self.friends = newSeq[string]()
+  if fname notin self.friends:
+    self.friends.add(fname)
+
+method age_diff(self, other: Person) {.base.} =
+  let diff = self.get_age() - other.get_age()
+  if self.age > other.age:
+    echo self.name, " is ", diff, " years older than ", other.name
+  else:
+    echo self.name, " is ", -diff, " years younger than ", other.name
 
 let c = Cat(name: "Tom")
 c.set_age(2)
 echo c.get_name(), " ", c.get_age()
+
+let eric = Person(name: "Eric", age: 45)
+eric.speak()
+let john = Person(name: "John", age: 55)
+eric.age_diff(john)
+john.add_friend("eric")
+echo john.get_friends()
