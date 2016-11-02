@@ -1,27 +1,21 @@
+import oopmacro
 
-type
-  Animal = ref object of RootObj
-    age: int
-    name: string
-  Cat = ref object of Animal
-  Rabbit = ref object of Animal
-  Person = ref object of Animal
+class Animal of RootObj:
+  var age: int
+  var name: string
 
-proc get_age(self: Animal): int =
-  result = self.age
+  method get_age: int = this.age
+  method get_name: string = this.name
+  method set_age(newage: int) = this.age = newage
+  method set_name(newname: string) = this.name = newname
+  method `$`: string = "animal:" & this.name & ":" & $this.age
 
-proc get_name(self: Animal): string =
-  result = self.name
-
-proc set_age(self: Animal, newage: int) =
-  self.age = newage
-
-proc set_name(self: Animal, newname: string) =
-  self.name = newname
-
-proc `$`(self: Animal): string =
-  result = "animal:" & self.name & ":" & $self.age
-
+class Cat of Animal:
+  discard
+class Rabbit of Animal:
+  discard
+class Person of Animal:
+  discard
 
 let c = Cat(name: "Tom")
 c.set_age(2)
