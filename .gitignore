@@ -1,5 +1,7 @@
 # Ignore all root files
 /*
+# Exclude pdf file
+!/*.pdf
 # Exclude root directories
 !/*/
 # Include nimcache subdirectories
