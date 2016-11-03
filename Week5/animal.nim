@@ -1,64 +1,42 @@
+import oopmacro
 
-type
-  Animal = ref object of RootObj
-    age: int
-    name: string
+class Animal of RootObj:
+  var age: int
+  var name: string
 
-  Cat = ref object of Animal
-  Rabbit = ref object of Animal
-  Person = ref object of Animal
-    friends: seq[string]
+  method get_age: int {.base.} = this.age
+  method get_name: string {.base.} = this.name
+  method set_age(newage: int) {.base.} = this.age = newage
+  method set_name(newname: string) {.base.} = this.name = newname
+  method speak {.base.} = echo ""
+  proc `$`: string = "animal:" & this.name & ":" & $this.age
 
-method get_age(self: Animal): int {.base.} =
-  result = self.age
+class Cat of Animal:
+  method speak = echo "Meow"
+  proc `$`: string = "cat:" & this.name & ":" & $this.age
 
-method get_name(self: Animal): string {.base.} =
-  result = self.name
+class Rabbit of Animal:
+  method speak = echo "Meep"
+  proc `$`: string = "rabbit:" & this.name & ":" & $this.age
 
-method set_age(self: Animal, newage: int) {.base.} =
-  self.age = newage
+class Person of Animal:
+  var friends: seq[string]
+  method speak = echo "Hello"
+  method get_friends: seq[string] {.base.} = this.friends
+  method add_friend(fname: string) {.base.} =
+    if isNil(this.friends): this.friends = newSeq[string]()
+    if fname notin this.friends:
+      this.friends.add(fname)
 
-method set_name(self: Animal, newname: string) {.base.} =
-  self.name = newname
+  method age_diff(other: Person) {.base.} =
+    let diff = this.get_age() - other.get_age()
+    if this.age > other.age:
+      echo this.name, " is ", diff, " years older than ", other.name
+    else:
+      echo this.name, " is ", -diff, " years younger than ", other.name
 
-method `$`(self: Animal): string {.base.} =
-  result = "animal:" & self.name & ":" & $self.age
+  proc `$`: string = "person:" & this.name & ":" & $this.age
 
-method speak(self: Animal) {.base.} =
-  echo ""
-
-method speak(self: Cat) =
-  echo "Meow"
-
-method `$`(self: Cat): string =
-  result = "cat:" & self.name & ":" & $self.age
-
-method speak(self: Rabbit) =
-  echo "Meep"
-
-method `$`(self: Rabbit): string =
-  result = "rabbit:" & self.name & ":" & $self.age
-
-method speak(self: Person) =
-  echo "Hello"
-
-method `$`(self: Person): string =
-  result = "person:" & self.name & ":" & $self.age
-
-method get_friends(self: Person): seq[string] {.base.} =
-  result = self.friends
-
-method add_friend(self: Person, fname: string) {.base.} =
-  if isNil(self.friends): self.friends = newSeq[string]()
-  if fname notin self.friends:
-    self.friends.add(fname)
-
-method age_diff(self, other: Person) {.base.} =
-  let diff = self.get_age() - other.get_age()
-  if self.age > other.age:
-    echo self.name, " is ", diff, " years older than ", other.name
-  else:
-    echo self.name, " is ", -diff, " years younger than ", other.name
 
 let c = Cat(name: "Tom")
 c.set_age(2)
