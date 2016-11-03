@@ -28,10 +28,8 @@ macro class*(head, body: untyped): untyped =
   for node in body.children:
     case node.kind:
       of nnkMethodDef, nnkProcDef:
-        # inject `this: T` into the arguments
-        let p = copyNimTree(node.params)
-        p.insert(1, newIdentDefs(ident"this", typeName))
-        node.params = p
+        # inject `self: T` into the arguments
+        node.params.insert(1, newIdentDefs(ident("self"), typeName))
         result.add(node)
       of nnkVarSection:
         # variables get turned into fields of the type.

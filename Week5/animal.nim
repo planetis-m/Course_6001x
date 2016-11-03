@@ -1,41 +1,41 @@
 import oopmacro
 
-class Animal of RootObj:
+class Animal:
   var age: int
   var name: string
 
-  method get_age: int {.base.} = this.age
-  method get_name: string {.base.} = this.name
-  method set_age(newage: int) {.base.} = this.age = newage
-  method set_name(newname: string) {.base.} = this.name = newname
+  method get_age: int {.base.} = self.age
+  method get_name: string {.base.} = self.name
+  method set_age(newage: int) {.base.} = self.age = newage
+  method set_name(newname: string) {.base.} = self.name = newname
   method speak {.base.} = echo ""
-  proc `$`: string = "animal:" & this.name & ":" & $this.age
+  proc `$`: string = "animal:" & self.name & ":" & $self.age
 
 class Cat of Animal:
   method speak = echo "Meow"
-  proc `$`: string = "cat:" & this.name & ":" & $this.age
+  proc `$`: string = "cat:" & self.name & ":" & $self.age
 
 class Rabbit of Animal:
   method speak = echo "Meep"
-  proc `$`: string = "rabbit:" & this.name & ":" & $this.age
+  proc `$`: string = "rabbit:" & self.name & ":" & $self.age
 
 class Person of Animal:
   var friends: seq[string]
   method speak = echo "Hello"
-  method get_friends: seq[string] {.base.} = this.friends
+  method get_friends: seq[string] {.base.} = self.friends
   method add_friend(fname: string) {.base.} =
-    if isNil(this.friends): this.friends = newSeq[string]()
-    if fname notin this.friends:
-      this.friends.add(fname)
+    if isNil(self.friends): self.friends = newSeq[string]()
+    if fname notin self.friends:
+      self.friends.add(fname)
 
   method age_diff(other: Person) {.base.} =
-    let diff = this.get_age() - other.get_age()
-    if this.age > other.age:
-      echo this.name, " is ", diff, " years older than ", other.name
+    let diff = self.get_age() - other.get_age()
+    if self.age > other.age:
+      echo self.name, " is ", diff, " years older than ", other.name
     else:
-      echo this.name, " is ", -diff, " years younger than ", other.name
+      echo self.name, " is ", -diff, " years younger than ", other.name
 
-  proc `$`: string = "person:" & this.name & ":" & $this.age
+  proc `$`: string = "person:" & self.name & ":" & $self.age
 
 
 let c = Cat(name: "Tom")
