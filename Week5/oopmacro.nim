@@ -1,6 +1,6 @@
 import macros
 
-macro class*(head, body: untyped): untyped =
+macro class*(head, body): untyped =
   var typeName, baseName: NimNode
   if head.kind == nnkIdent:
     typeName = head
@@ -24,23 +24,21 @@ macro class*(head, body: untyped): untyped =
           newEmptyNode()))))
 
   var recList = newNimNode(nnkRecList)
-
   for node in body.children:
-    case node.kind:
-      of nnkMethodDef, nnkProcDef:
-        # inject `self: T` into the arguments
-        node.params.insert(1, newIdentDefs(ident("self"), typeName))
-        result.add(node)
-      of nnkVarSection:
-        # variables get turned into fields of the type.
-        for n in node.children:
-          recList.add(n)
-      else:
-        result.add(node)
+    case node.kind
+    of nnkMethodDef, nnkProcDef:
+      # inject `self: T` into the arguments
+      node.params.insert(1, newIdentDefs(ident("self"), typeName))
+      result.add(node)
+    of nnkVarSection:
+      # variables get turned into fields of the type.
+      for n in node.children:
+        recList.add(n)
+    else:
+      result.add(node)
 
   result[0][0][2][0][2] = recList
-  #echo treeRepr(result[0][0][2][0][2])
-  #echo repr(result)
+
 
 when isMainModule:
   class Animal:
