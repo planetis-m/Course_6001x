@@ -4,7 +4,8 @@ macro class*(head, body): untyped =
   var typeName, baseName: NimNode
   if head.kind == nnkIdent:
     typeName = head
-  elif head.kind == nnkInfix and head[0].ident == !"of":
+    baseName = ident("RootObj")
+  elif head.kind == nnkInfix and $head[0] == "of":
     typeName = head[1]
     baseName = head[2]
   else:
@@ -13,14 +14,12 @@ macro class*(head, body): untyped =
   result = newStmtList()
   result.add newNimNode(nnkTypeSection).add(
     newNimNode(nnkTypeDef).add(
-      newIdentNode(typeName.ident),
+      typeName,
       newEmptyNode(),
       newNimNode(nnkRefTy).add(
         newNimNode(nnkObjectTy).add(
           newEmptyNode(),
-          newNimNode(nnkOfInherit).add(
-            if baseName == nil: newIdentNode("RootObj")
-            else: newIdentNode(baseName.ident)),
+          newNimNode(nnkOfInherit).add(baseName),
           newEmptyNode()))))
 
   var recList = newNimNode(nnkRecList)
