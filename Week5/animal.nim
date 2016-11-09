@@ -3,7 +3,7 @@ import oopmacro
 class Animal:
   var age: int
   var name: string
-  method speak {.base.} = echo "..."
+  proc speak = echo "..."
   proc get_age: int = self.age
   proc get_name: string = self.name
   proc set_age(newage: int) = self.age = newage
@@ -11,16 +11,16 @@ class Animal:
   proc `$`: string = "animal:" & self.name & ":" & $self.age
 
 class Cat of Animal:
-  method speak = echo "Meow"
+  proc speak = echo "Meow"
   proc `$`: string = "cat:" & self.name & ":" & $self.age
 
 class Rabbit of Animal:
-  method speak = echo "Meep"
+  proc speak = echo "Meep"
   proc `$`: string = "rabbit:" & self.name & ":" & $self.age
 
 class Person of Animal:
   var friends: seq[Animal]
-  method speak = echo "Hello"
+  proc speak = echo "Hello"
   proc get_friends: seq[Animal] = self.friends
   proc add_friend(friend: Animal) =
     if friend notin self.friends:
