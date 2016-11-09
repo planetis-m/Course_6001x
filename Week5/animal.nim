@@ -11,14 +11,20 @@ class Animal:
   proc `$`: string = "animal:" & self.name & ":" & $self.age
 
 class Cat of Animal:
+  proc newCat(name: string, age: int): Cat {.init.} =
+    result = Cat(name: name, age: age)
   proc speak = echo "Meow"
   proc `$`: string = "cat:" & self.name & ":" & $self.age
 
 class Rabbit of Animal:
+  proc newRabbit(name: string, age: int): Rabbit {.init.} =
+    result = Rabbit(name: name, age: age)
   proc speak = echo "Meep"
   proc `$`: string = "rabbit:" & self.name & ":" & $self.age
 
 class Person of Animal:
+  proc newPerson(name: string, age: int): Person {.init.} =
+    result = Person(name: name, age: age, friends: @[])
   var friends: seq[Person]
   proc speak = echo "Hello"
   proc get_friends: seq[Person] = self.friends
@@ -32,14 +38,6 @@ class Person of Animal:
     else:
       echo self.name, " is ", -diff, " years younger than ", other.name
   proc `$`: string = "person:" & self.name & ":" & $self.age
-
-# Constructor procs
-proc newCat(name: string, age: int): Cat =
-  result = Cat(name: name, age: age)
-proc newRabbit(name: string, age: int): Rabbit =
-  result = Rabbit(name: name, age: age)
-proc newPerson(name: string, age: int): Person =
-  result = Person(name: name, age: age, friends: @[])
 
 
 let c = Cat(name: "Tom")

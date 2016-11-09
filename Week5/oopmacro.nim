@@ -1,5 +1,11 @@
 import macros
 
+macro init*(p): untyped =
+  # remove self from the construction proc
+  if p.params[1][0].ident == !"self":
+    del(p.params, 1)
+  result = p
+
 macro class*(head, body): untyped =
   # The macro is immediate so that it doesn't
   # resolve identifiers passed to it
@@ -50,6 +56,8 @@ when isMainModule:
   class Person of Animal:
     var name: string
     method vocalize {.base.} = echo "..."
+    proc newPerson(name: string, age: int): Person {.init.} =
+      result = Person(name: name, age: age)
 
-  let john = Person(name: "John", age: 10)
+  let john = newPerson("John", 10)
   john.vocalize()
