@@ -89,7 +89,7 @@ proc updateHand*(hand: CountTable[char], word: string): CountTable[char] =
     #
     result = hand
     for letter in word:
-        result[letter] -= 1
+        result.inc(letter, -1)
 
 #
 # Problem #3: Test word validity
