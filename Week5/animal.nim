@@ -19,10 +19,10 @@ class Rabbit of Animal:
   proc `$`: string = "rabbit:" & self.name & ":" & $self.age
 
 class Person of Animal:
-  var friends: seq[Animal]
+  var friends: seq[Person]
   proc speak = echo "Hello"
-  proc get_friends: seq[Animal] = self.friends
-  proc add_friend(friend: Animal) =
+  proc get_friends: seq[Person] = self.friends
+  proc add_friend(friend: Person) =
     if friend notin self.friends:
       self.friends.add(friend)
   proc age_diff(other: Person) =
