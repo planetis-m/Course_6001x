@@ -3,12 +3,11 @@ import oopmacro
 class Animal:
   var age: int
   var name: string
-
-  method get_age: int {.base.} = self.age
-  method get_name: string {.base.} = self.name
-  method set_age(newage: int) {.base.} = self.age = newage
-  method set_name(newname: string) {.base.} = self.name = newname
-  method speak {.base.} = echo ""
+  method speak {.base.} = echo "..."
+  proc get_age: int = self.age
+  proc get_name: string = self.name
+  proc set_age(newage: int) = self.age = newage
+  proc set_name(newname: string) = self.name = newname
   proc `$`: string = "animal:" & self.name & ":" & $self.age
 
 class Cat of Animal:
@@ -20,31 +19,37 @@ class Rabbit of Animal:
   proc `$`: string = "rabbit:" & self.name & ":" & $self.age
 
 class Person of Animal:
-  var friends: seq[string]
+  var friends: seq[Animal]
   method speak = echo "Hello"
-  method get_friends: seq[string] {.base.} = self.friends
-  method add_friend(fname: string) {.base.} =
-    if isNil(self.friends): self.friends = newSeq[string]()
-    if fname notin self.friends:
-      self.friends.add(fname)
-
-  method age_diff(other: Person) {.base.} =
-    let diff = self.get_age() - other.get_age()
+  proc get_friends: seq[Animal] = self.friends
+  proc add_friend(friend: Animal) =
+    if friend notin self.friends:
+      self.friends.add(friend)
+  proc age_diff(other: Person) =
+    let diff = self.age - other.age
     if self.age > other.age:
       echo self.name, " is ", diff, " years older than ", other.name
     else:
       echo self.name, " is ", -diff, " years younger than ", other.name
-
   proc `$`: string = "person:" & self.name & ":" & $self.age
+
+# Constructor procs
+proc newCat(name: string, age: int): Cat =
+  result = Cat(name: name, age: age)
+proc newRabbit(name: string, age: int): Rabbit =
+  result = Rabbit(name: name, age: age)
+proc newPerson(name: string, age: int): Person =
+  result = Person(name: name, age: age, friends: @[])
 
 
 let c = Cat(name: "Tom")
 c.set_age(2)
 echo c.get_name(), " ", c.get_age()
 
-let eric = Person(name: "Eric", age: 45)
+let eric = newPerson("Eric", 45)
 eric.speak()
-let john = Person(name: "John", age: 55)
+
+let john = newPerson("John", 55)
 eric.age_diff(john)
-john.add_friend("eric")
+john.add_friend(eric)
 echo john.get_friends()
