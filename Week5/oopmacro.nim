@@ -45,6 +45,13 @@ macro class*(head, body): untyped =
     else:
       result.add(node)
 
+  # Create a constructor procedure
+  let consParams = [typeName, recList[0]]
+  let consName = newIdentNode("new" & $typeName)
+  let consProc = newProc(consName, consParams)
+
+  result.add(consProc)
+
   # inject recList under objectTy
   result[0][0][2][0][2] = recList
 
@@ -55,8 +62,6 @@ when isMainModule:
 
   class Person of Animal:
     var name: string
-    proc newPerson(name: string, age: int): Person {.init.} =
-      result = Person(name: name, age: age)
     method vocalize {.base.} = echo "..."
 
   let john = newPerson("John", 10)
