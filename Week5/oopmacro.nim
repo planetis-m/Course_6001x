@@ -14,8 +14,8 @@ macro class*(head, body): untyped =
   if head.kind == nnkIdent:
     # `head` is expression `typeName`
     typeName = head
-    baseName = ident("RootObj")
-  elif head.kind == nnkInfix and $head[0] == "of":
+    baseName = newIdentNode("RootObj")
+  elif head.kind == nnkInfix and head[0].ident == !"of":
     # `head` is expression `typeName of baseClass`
     typeName = head[1]
     baseName = head[2]
@@ -55,9 +55,9 @@ when isMainModule:
 
   class Person of Animal:
     var name: string
-    method vocalize {.base.} = echo "..."
     proc newPerson(name: string, age: int): Person {.init.} =
       result = Person(name: name, age: age)
+    method vocalize {.base.} = echo "..."
 
   let john = newPerson("John", 10)
   john.vocalize()
