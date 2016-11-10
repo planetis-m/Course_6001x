@@ -11,19 +11,19 @@ class Animal:
   proc `$`: string = "animal:" & self.name & ":" & $self.age
 
 class Cat of Animal:
-  proc newCat(name: string, age: int): Cat {.init.} =
+  proc newCat(name: string, age: int): Cat =
     result = Cat(name: name, age: age)
   proc speak = echo "Meow"
   proc `$`: string = "cat:" & self.name & ":" & $self.age
 
 class Rabbit of Animal:
-  proc newRabbit(name: string, age: int): Rabbit {.init.} =
+  proc newRabbit(name: string, age: int): Rabbit =
     result = Rabbit(name: name, age: age)
   proc speak = echo "Meep"
   proc `$`: string = "rabbit:" & self.name & ":" & $self.age
 
 class Person of Animal:
-  proc newPerson(name: string, age: int): Person {.init.} =
+  proc newPerson(name: string, age: int): Person =
     result = Person(name: name, age: age, friends: @[])
   var friends: seq[Person]
   proc speak = echo "Hello"

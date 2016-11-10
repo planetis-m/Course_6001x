@@ -1,11 +1,5 @@
 import macros
 
-macro init*(p): untyped =
-  # remove self from the construction proc
-  if p.params[1][0].ident == !"self":
-    del(p.params, 1)
-  result = p
-
 macro class*(head, body): untyped =
   # The macro is immediate so that it doesn't
   # resolve identifiers passed to it
@@ -30,13 +24,18 @@ macro class*(head, body): untyped =
   # var declarations will be turned into object fields
   var recList = newNimNode(nnkRecList)
 
+  # expected name of ctor by convention
+  let ctorName = newIdentNode("new" & $typeName)
+
   # Iterate over the statements, adding `this: T`
   # to the parameters of functions
   for node in body.children:
     case node.kind
     of nnkMethodDef, nnkProcDef:
-      # inject `self: T` into the arguments
-      node.params.insert(1, newIdentDefs(ident("self"), typeName))
+      # make sure it is not the ctor proc
+      if node.name.basename != ctorName:
+        # inject `self: T` into the arguments
+        node.params.insert(1, newIdentDefs(ident("self"), typeName))
       result.add(node)
     of nnkVarSection:
       # variables get turned into fields of the type.
@@ -44,13 +43,6 @@ macro class*(head, body): untyped =
         recList.add(n)
     else:
       result.add(node)
-
-  # Create a constructor procedure
-  let consParams = [typeName, recList[0]]
-  let consName = newIdentNode("new" & $typeName)
-  let consProc = newProc(consName, consParams)
-
-  result.add(consProc)
 
   # inject recList under objectTy
   result[0][0][2][0][2] = recList
@@ -62,6 +54,8 @@ when isMainModule:
 
   class Person of Animal:
     var name: string
+    proc newPerson(name: string, age: int): Person =
+      result = Person(name: name, age: age)
     method vocalize {.base.} = echo "..."
 
   let john = newPerson("John", 10)
