@@ -4,15 +4,15 @@ macro class*(head, body): untyped =
   # The macro is immediate so that it doesn't
   # resolve identifiers passed to it
   var typeName, baseName: NimNode
+  # flag if object should be exported
   var exported: bool
 
-  # `head` is expression `typeName of baseClass`
   if head.kind == nnkCall:
-    # Object is not exported
+    # `head` is expression `typeName(baseClass)`
     typeName = head[0]
     baseName = head[1]
-  elif head.kind == nnkInfix and head[2].kind == nnkPar:
-    # Object is exported
+  elif head.kind == nnkInfix and head[0].ident == !"*" and head[2].kind == nnkPar:
+    # `head` is expression `typeName*(baseClass)`
     typeName = head[1]
     baseName = head[2][0]
     exported = true
@@ -22,6 +22,7 @@ macro class*(head, body): untyped =
   # create a type section in the result
   result =
     if exported:
+      # mark `typeName` with an asterisk
       quote do:
         type `typeName`* = ref object of `baseName`
     else:

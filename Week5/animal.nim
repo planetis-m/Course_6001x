@@ -1,6 +1,6 @@
 import oopmacro
 
-class Animal:
+class Animal(RootObj):
   var age: int
   var name: string
   proc speak = echo "..."
@@ -10,19 +10,19 @@ class Animal:
   proc set_name(newname: string) = self.name = newname
   proc `$`: string = "animal:" & self.name & ":" & $self.age
 
-class Cat of Animal:
+class Cat(Animal):
   proc newCat(name: string, age: int): Cat =
     result = Cat(name: name, age: age)
   proc speak = echo "Meow"
   proc `$`: string = "cat:" & self.name & ":" & $self.age
 
-class Rabbit of Animal:
+class Rabbit(Animal):
   proc newRabbit(name: string, age: int): Rabbit =
     result = Rabbit(name: name, age: age)
   proc speak = echo "Meep"
   proc `$`: string = "rabbit:" & self.name & ":" & $self.age
 
-class Person of Animal:
+class Person(Animal):
   proc newPerson(name: string, age: int): Person =
     result = Person(name: name, age: age, friends: @[])
   var friends: seq[Person]
