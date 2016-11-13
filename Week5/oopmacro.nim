@@ -7,14 +7,14 @@ macro class*(head, body): untyped =
   var exported: bool
 
   # `head` is expression `typeName of baseClass`
-  if head.kind == nnkInfix and head[0].ident == !"of":
+  if head.kind == nnkCall:
     # Object is not exported
-    typeName = head[1]
-    baseName = head[2]
-  elif head.kind == nnkInfix and head[2].kind == nnkPrefix and head[2][0].ident == !"of":
+    typeName = head[0]
+    baseName = head[1]
+  elif head.kind == nnkInfix and head[2].kind == nnkPar:
     # Object is exported
     typeName = head[1]
-    baseName = head[2][1]
+    baseName = head[2][0]
     exported = true
   else:
     quit "Invalid node: " & head.lispRepr
@@ -56,10 +56,10 @@ macro class*(head, body): untyped =
 
 
 when isMainModule:
-  class Animal of RootObj:
+  class Animal*(RootObj):
     var age*: int
 
-  class Person* of Animal:
+  class Person*(Animal):
     var name*: string
     proc newPerson*(name: string, age: int): Person =
       result = Person(name: name, age: age)
