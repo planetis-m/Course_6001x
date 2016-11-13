@@ -4,22 +4,29 @@ macro class*(head, body): untyped =
   # The macro is immediate so that it doesn't
   # resolve identifiers passed to it
   var typeName, baseName: NimNode
+  var exported: bool
 
-  if head.kind == nnkIdent:
-    # `head` is expression `typeName`
-    typeName = head
-    baseName = newIdentNode("RootObj")
-  elif head.kind == nnkInfix and head[0].ident == !"of":
-    # `head` is expression `typeName of baseClass`
+  # `head` is expression `typeName of baseClass`
+  if head.kind == nnkInfix and head[0].ident == !"of":
+    # Object is not exported
     typeName = head[1]
     baseName = head[2]
+  elif head.kind == nnkInfix and head[2].kind == nnkPrefix and head[2][0].ident == !"of":
+    # Object is exported
+    typeName = head[1]
+    baseName = head[2][1]
+    exported = true
   else:
     quit "Invalid node: " & head.lispRepr
 
   # create a type section in the result
   result =
-    quote do:
-      type `typeName` = ref object of `baseName`
+    if exported:
+      quote do:
+        type `typeName`* = ref object of `baseName`
+    else:
+      quote do:
+        type `typeName` = ref object of `baseName`
 
   # var declarations will be turned into object fields
   var recList = newNimNode(nnkRecList)
@@ -49,14 +56,14 @@ macro class*(head, body): untyped =
 
 
 when isMainModule:
-  class Animal:
-    var age: int
+  class Animal of RootObj:
+    var age*: int
 
-  class Person of Animal:
-    var name: string
-    proc newPerson(name: string, age: int): Person =
+  class Person* of Animal:
+    var name*: string
+    proc newPerson*(name: string, age: int): Person =
       result = Person(name: name, age: age)
-    method vocalize {.base.} = echo "..."
+    method vocalize* {.base.} = echo "..."
 
   let john = newPerson("John", 10)
   john.vocalize()
