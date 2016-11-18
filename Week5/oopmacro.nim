@@ -4,6 +4,7 @@ macro class*(head, body): untyped =
   # The macro is immediate so that it doesn't
   # resolve identifiers passed to it
   var typeName, baseName: NimNode
+
   # flag if object should be exported
   var exported: bool
 
@@ -60,11 +61,11 @@ when isMainModule:
   class Animal*(RootObj):
     var age*: int
 
-  class Person*(Animal):
-    var name*: string
-    proc newPerson*(name: string, age: int): Person =
+  class Person(Animal):
+    var name: string
+    proc newPerson(name: string, age: int): Person =
       result = Person(name: name, age: age)
-    method vocalize* {.base.} = echo "..."
+    method vocalize {.base.} = echo "..."
 
   let john = newPerson("John", 10)
   john.vocalize()
