@@ -1,31 +1,36 @@
-{.this: self.}
-import oopmacro
 
-class Person(RootObj):
-  var
+type
+  Person = ref object of RootObj
     age: int
     name: string
 
-  proc newPerson(name:string, age = 0): Person =
-    result = Person(name: name, age: age)
+proc newPerson(name: string; age = 0): Person =
+  result = Person(name: name, age: age)
 
-  proc greet =
-    echo "Hello, I am ", name, "."
-    echo "I'm ", age, " years old."
+proc greet(self: Person) =
+  echo "Hello, I am ", self.name, "."
+  echo "I\'m ", self.age, " years old."
 
 var
   boys: seq[Person]
   girls: seq[Person]
 
-class Boy(Person):
-  proc newBoy(name:string, age = 0): Boy =
-    result = Boy(name: name, age: age)
-    boys.add(result)
 
-class Girl(Person):
-  proc newGirl(name:string, age = 0): Girl =
-    result = Girl(name: name, age: age)
-    girls.add(result)
+type
+  Boy = ref object of Person
+
+proc newBoy(name: string; age = 0): Boy =
+  result = Boy(name: name, age: age)
+  boys.add(result)
+
+
+type
+  Girl = ref object of Person
+
+proc newGirl(name: string; age = 0): Girl =
+  result = Girl(name: name, age: age)
+  girls.add(result)
+
 
 proc setup =
   boys = @[]
