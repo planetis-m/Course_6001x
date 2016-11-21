@@ -35,20 +35,27 @@ macro class*(head, body): untyped =
   # expected name of ctor by convention
   let ctorName = newIdentNode("new" & $typeName)
 
+  proc names(n: NimNode): seq[NimNode] {.compileTime.} =
+    result = @[]
+    for i in 0 .. len(n) - 3:
+      result.add n[i]
+
   template injectThis: untyped =
+    # check if user already defined parameter `self`
+    let exists = findChild(node.params, it.kind == nnkIdentDefs and ident("self") in it.names)
     # make sure it is not the ctor proc
-    if node.name.basename != ctorName:
+    if node.name.basename != ctorName and exists.isNil:
       # inject `self: T` into the arguments
       node.params.insert(1, newIdentDefs(ident("self"), typeName))
 
   template markAsBase: untyped =
-    # find out if user already annotated method with the base pragma
-    let exists = findChild(node.pragma, it.ident == !"base")
+    # check if user already annotated method with the base pragma
+    let exists = findChild(node.pragma, it.kind == nnkIdent and it.ident == !"base")
     # add base pragma for methods belonging to a base class
     if baseName.ident == !"RootObj" and exists.isNil:
       node.addPragma(ident("base"))
 
-  # Iterate over the statements, adding `this: T`
+  # Iterate over the statements, adding `self: T`
   # to the parameters of functions
   for node in body.children:
     case node.kind
@@ -73,13 +80,13 @@ macro class*(head, body): untyped =
 when isMainModule:
   class Animal(RootObj):
     var age: int
-    method vocalize = echo "..."
+    method vocalize(self: Animal) = echo "..."
 
   class Person(Animal):
     var name: string
     proc newPerson(name: string, age: int): Person =
       result = Person(name: name, age: age)
-    method vocalize = echo "Hey"
+    method vocalize(self: Person) = echo "Hey"
 
   let john = newPerson("John", 10)
   john.vocalize()
