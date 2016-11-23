@@ -3,6 +3,8 @@ type
   Person = ref object of RootObj
     age: int
     name: string
+  Boy = ref object of Person
+  Girl = ref object of Person
 
 proc newPerson(name: string; age = 0): Person =
   result = Person(name: name, age: age)
@@ -16,16 +18,9 @@ var
   girls: seq[Person]
 
 
-type
-  Boy = ref object of Person
-
 proc newBoy(name: string; age = 0): Boy =
   result = Boy(name: name, age: age)
   boys.add(result)
-
-
-type
-  Girl = ref object of Person
 
 proc newGirl(name: string; age = 0): Girl =
   result = Girl(name: name, age: age)
