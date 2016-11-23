@@ -17,17 +17,19 @@ macro class*(head, body): untyped =
     typeName = head[1]
     baseName = head[2][0]
     exported = true
+
   else:
     quit "Invalid node: " & head.lispRepr
 
   # create a type section in the result
   result =
-    quote do:
-      type `typeName` = ref object of `baseName`
-
-  # mark `typeName` with an asterisk
-  if exported:
-    result[0][0][0] = newNimNode(nnkPostfix).add(ident("*"), typeName)
+    if exported:
+      # mark `typeName` with an asterisk
+      quote do:
+        type `typeName`* = ref object of `baseName`
+    else:
+      quote do:
+        type `typeName` = ref object of `baseName`
 
   # var declarations will be turned into object fields
   var recList = newNimNode(nnkRecList)
@@ -35,41 +37,26 @@ macro class*(head, body): untyped =
   # expected name of ctor by convention
   let ctorName = newIdentNode("new" & $typeName)
 
-  proc names(n: NimNode): seq[NimNode] {.compileTime.} =
-    result = @[]
-    for i in 0 .. len(n) - 3:
-      result.add n[i]
-
-  template injectThis: untyped =
-    # check if user already defined parameter `self`
-    let exists = findChild(node.params, it.kind == nnkIdentDefs and ident("self") in it.names)
-    # make sure it is not the ctor proc
-    if node.name.basename != ctorName and exists.isNil:
-      # inject `self: T` into the arguments
-      node.params.insert(1, newIdentDefs(ident("self"), typeName))
-
-  template markAsBase: untyped =
-    # check if user already annotated method with the base pragma
-    let exists = findChild(node.pragma, it.kind == nnkIdent and it.ident == !"base")
-    # add base pragma for methods belonging to a base class
-    if baseName.ident == !"RootObj" and exists.isNil:
-      node.addPragma(ident("base"))
-
   # Iterate over the statements, adding `self: T`
   # to the parameters of functions
   for node in body.children:
     case node.kind
-    of nnkMethodDef:
-      injectThis()
-      markAsBase()
+
+    of nnkMethodDef, nnkProcDef:
+      # check if it is not the ctor proc
+      if node.name.basename != ctorName:
+        # inject `self: T` into the arguments
+        node.params.insert(1, newIdentDefs(ident("self"), typeName))
+      else:
+        # specify the return type of the ctor proc
+        node.params[0] = typeName
       result.add(node)
-    of nnkProcDef:
-      injectThis()
-      result.add(node)
+
     of nnkVarSection:
       # variables get turned into fields of the type.
       for n in node.children:
         recList.add(n)
+
     else:
       result.add(node)
 
@@ -80,13 +67,13 @@ macro class*(head, body): untyped =
 when isMainModule:
   class Animal(RootObj):
     var age: int
-    method vocalize(self: Animal) = echo "..."
+    method vocalize {.base.} = echo "..."
 
   class Person(Animal):
     var name: string
-    proc newPerson(name: string, age: int): Person =
+    proc newPerson(name: string, age: int) =
       result = Person(name: name, age: age)
-    method vocalize(self: Person) = echo "Hey"
+    method vocalize = echo "Hey"
 
   let john = newPerson("John", 10)
   john.vocalize()
