@@ -1,10 +1,13 @@
-var warm: seq[string]
-warm = @["red", "yellow", "orange"]
-shallow warm
+type
+  Warm = ref WarmObj
+  WarmObj = object
+    colors: seq[string]
 
-var hot = warm
+var
+  w = Warm(colors: @["red", "yellow", "orange"])
+  h = w
 
-warm[2] = "red"
-warm.add("pink")
+h.colors.add("pink")
 
-echo hot
+echo w.colors
+echo h.colors
