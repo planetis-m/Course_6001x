@@ -22,14 +22,16 @@ macro class*(head, body): untyped =
     quit "Invalid node: " & head.lispRepr
 
   # create a type section in the result
-  result =
-    if exported:
-      # mark `typeName` with an asterisk
-      quote do:
-        type `typeName`* = ref object of `baseName`
-    else:
-      quote do:
-        type `typeName` = ref object of `baseName`
+  template typeDecl(a, b): untyped =
+    type a = ref object of b
+
+  template typeDeclExp(a, b): untyped =
+    type a* = ref object of b
+
+  if exported:
+    result = getAst(typeDeclExp(typeName, baseName))
+  else:
+    result = getAst(typeDecl(typeName, baseName))
 
   # var declarations will be turned into object fields
   var recList = newNimNode(nnkRecList)
