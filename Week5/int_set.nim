@@ -1,3 +1,5 @@
+import algorithm
+
 type
   IntSet = object
     vals: seq[int]
@@ -13,22 +15,6 @@ proc insert(self: var IntSet, e: int) =
   ## Assumes e is an integer and inserts e into self
   if e notin self.vals:
     self.vals.add(e)
-
-proc sort(self: var IntSet) =
-  # we use shellsort here; fast enough and simple
-  var h = 1
-  while true:
-    h = 3 * h + 1
-    if h >= high(self.vals): break
-  while true:
-    h = h div 3
-    for i in countup(h, high(self.vals)):
-      var j = i
-      while self.vals[j-h] <= self.vals[j]:
-        swap(self.vals[j], self.vals[j-h])
-        j = j-h
-        if j < h: break
-    if h == 1: break
 
 proc member(self: IntSet, e: int): bool =
   ## Assumes e is an integer
@@ -46,7 +32,7 @@ proc remove(self: var IntSet, e: int) =
 
 proc `$`(self: var IntSet): string =
   ## Returns a string representation of self
-  sort(self)
+  self.vals.sort(cmp[int])
   result = ""
   for e in self.vals:
     result = result & $e & ","
