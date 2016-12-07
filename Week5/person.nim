@@ -1,4 +1,4 @@
-import times, parseutils
+import algorithm, times, parseutils
 
 type
   Person = object
@@ -13,12 +13,14 @@ proc setBirthDay(self: var Person; month, day, year: int) =
   self.birthday = initInterval(days = day, months = month, years = year)
 
 proc newPerson(name: string): Person =
-  result = Person(name: name, birthday: 0.days, lastname: setLastName(name))
+  result = Person(name: name, birthday: 0.years, lastname: setLastName(name))
 
 proc getLastName(self: Person): string =
   result = self.lastname
 
 proc getAge(self: Person): TimeInterval =
+  if self.birthday == 0.years:
+    raise newException(ValueError, "Uninitialized birthday field")
   result = (getTime() - self.birthday).toTimeInterval
 
 proc cmp(a, b: Person): int =
@@ -42,9 +44,9 @@ p1.setBirthday(5, 14, 1984)
 p2.setBirthday(3, 4, 1983)
 p3.setBirthday(10, 28, 1955)
 
-echo p1.getAge()
+var personList = @[p1, p2, p3, p4, p5]
 
-let personList = [p1, p2, p3, p4, p5]
+personList.sort(cmp)
 
 for e in personList:
   echo e
