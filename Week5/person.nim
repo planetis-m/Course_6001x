@@ -6,20 +6,18 @@ type
     birthday: TimeInterval
     lastname: string
 
-proc setLastName(name: string): string =
-  result = captureBetween(name, ' ')
+proc newPerson(name: string): Person =
+  result.name = name
+  result.lastname = captureBetween(name, ' ')
 
 proc setBirthDay(self: var Person; month, day, year: int) =
   self.birthday = initInterval(days = day, months = month, years = year)
-
-proc newPerson(name: string): Person =
-  result = Person(name: name, birthday: 0.years, lastname: setLastName(name))
 
 proc getLastName(self: Person): string =
   result = self.lastname
 
 proc getAge(self: Person): TimeInterval =
-  if self.birthday == 0.years:
+  if self.birthday == 0.days:
     raise newException(ValueError, "Uninitialized birthday field")
   result = (getTime() - self.birthday).toTimeInterval
 
