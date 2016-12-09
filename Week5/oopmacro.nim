@@ -46,12 +46,12 @@ macro class*(head, body): untyped =
 
     of nnkMethodDef, nnkProcDef:
       # check if it is not the ctor proc
-      if node.name.basename != ctorName:
-        # inject `self: T` into the arguments
-        node.params.insert(1, newIdentDefs(ident("self"), typeName))
-      else:
+      if node.name.kind != nnkAccQuoted and node.name.basename == ctorName:
         # specify the return type of the ctor proc
         node.params[0] = typeName
+      else:
+        # inject `self: T` into the arguments
+        node.params.insert(1, newIdentDefs(ident("self"), typeName))
       result.add(node)
 
     of nnkVarSection:
@@ -70,12 +70,15 @@ when isMainModule:
   class Animal(RootObj):
     var age: int
     method vocalize {.base.} = echo "..."
+    proc `$`: string = "animal:" & $self.age
 
   class Person(Animal):
     var name: string
     proc newPerson(name: string, age: int) =
       result = Person(name: name, age: age)
     method vocalize = echo "Hey"
+    proc `$`: string = "person:" & self.name & ":" & $self.age
 
   let john = newPerson("John", 10)
   john.vocalize()
+  echo john
