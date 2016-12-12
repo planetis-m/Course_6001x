@@ -2,14 +2,19 @@ include utils
 
 type
   Message = object
-    messageText: string
+    text: string
     validWords: seq[string]
+
+proc newMessage(text: string): Message =
+  result.text = text
+  result.validWords = loadWords(wordlist_filename)
+
+proc getMessageText(m: Message): string =
+  result = m.text
 
 proc getValidWords(m: Message): seq[string] =
   result = m.validWords
 
-proc getMessageText(m: Message): string =
-  result = m.messageText
 
 
 
@@ -19,4 +24,3 @@ proc getMessageText(m: Message): string =
 
 
 
-let word_list = loadWords(wordlist_filename)
