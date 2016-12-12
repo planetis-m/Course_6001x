@@ -1,4 +1,3 @@
-import os, strutils
 
 const
   wordlist_filename = "words.txt"
@@ -53,7 +52,7 @@ proc isWord(wordlist: seq[string], word: string): bool =
   word = word.strip(chars = Punctuation + Whitespace)
   return word in wordlist
 
-proc getStory(): string =
+proc getStoryString(): string =
   #
   # Returns: a joke in encrypted text.
   #
