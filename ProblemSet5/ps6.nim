@@ -1,4 +1,4 @@
-import tables, strutils
+import algorithm, tables, strutils
 include utils
 
 type
@@ -124,7 +124,7 @@ proc decrypt_message(self: CiphertextMessage): auto =
     let decrypted_text = self.apply_shift(s)
     var real_words: int
     for word in decrypted_text.split():
-      if is_word(self.get_valid_words(), word):
+      if is_word(self.valid_words, word):
         inc(real_words)
     if real_words > best_real_words:
       best_shift = s
@@ -136,5 +136,6 @@ proc decrypt_story: auto =
   let story = get_story_string()
   let ciphertext = newCiphertextMessage(story)
   return ciphertext.decrypt_message()
+#   return ciphertext.apply_shift(16)
 
 echo decrypt_story()

@@ -3,6 +3,12 @@ const
   wordlist_filename = "words.txt"
   Punctuation = {'\x21'..'\x2F', '\x3A'..'\x40', '\x5B'..'\x60', '\x7B'..'\x7E'}
 
+proc contains(a: seq[string], item: string): bool {.inline.} =
+  # in operator calls the procedure contains, which
+  # in its turn is a shortcut to find(a, item) >= 0
+  # overload contains to use binary search for wordlist which is ordered
+  return binarySearch(a, item) >= 0
+
 template withFile(f, fn, actions: untyped): untyped =
   var f: File
   if open(f, fn):
@@ -47,8 +53,7 @@ proc isWord(wordlist: seq[string], word: string): bool =
   # >>> is_word(wordlist, 'asdf') returns
   # false
   #
-  var
-    word = word.toLowerAscii()
+  var word = word.toLowerAscii()
   word = word.strip(chars = Punctuation + Whitespace)
   return word in wordlist
 
@@ -56,4 +61,4 @@ proc getStoryString(): string =
   #
   # Returns: a joke in encrypted text.
   #
-  result = string(readFile("story.txt"))
+  result = readFile("story.txt")

@@ -1,4 +1,4 @@
-import oopmacro, tables, strutils
+import oopmacro, algorithm, tables, strutils
 include utils
 
 class Message(RootObj):
@@ -82,7 +82,7 @@ class CiphertextMessage(Message):
       let decrypted_text = self.apply_shift(s)
       var real_words: int
       for word in decrypted_text.split():
-        if is_word(self.get_valid_words(), word):
+        if is_word(self.valid_words, word):
           inc(real_words)
       if real_words > best_real_words:
         best_shift = s
