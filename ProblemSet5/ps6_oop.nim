@@ -73,7 +73,7 @@ class CiphertextMessage(Message):
     result.message_text = text
     result.valid_words = loadWords(wordlist_filename)
 
-  proc decrypt_message: auto =
+  proc decrypt_message: (int, string) =
     var best_shift = 0
     var best_real_words = 0
     var best_msg = ""

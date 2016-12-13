@@ -103,7 +103,7 @@ proc newCiphertextMessage(text: string): CiphertextMessage =
   result.message_text = text
   result.valid_words = loadWords(wordlist_filename)
 
-proc decrypt_message(self: CiphertextMessage): auto =
+proc decrypt_message(self: CiphertextMessage): (int, string) =
   #
   # Decrypt self.message_text by trying every possible shift value
   # and find the "best" one. We will define "best" as the shift that
