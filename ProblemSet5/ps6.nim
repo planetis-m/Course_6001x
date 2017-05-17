@@ -2,11 +2,12 @@ import algorithm, tables, strutils
 include utils
 
 type
-  Message = object of RootObj
+  Message = ref object of RootObj
     message_text: string
     valid_words: seq[string]
 
 proc newMessage(text: string): Message =
+  new(result)
   result.message_text = text
   result.valid_words = loadWords(wordlist_filename)
 
@@ -60,12 +61,13 @@ proc apply_shift(self: Message; shift: int): string =
 
 
 type
-  PlaintextMessage = object of Message
+  PlaintextMessage = ref object of Message
     shift: int
     encrypting_dict: Table[char, char]
     message_text_encrypted: string
 
 proc newPlaintextMessage(text: string; shift: int): PlaintextMessage =
+  new(result)
   result.message_text = text
   result.valid_words = loadWords(wordlist_filename)
   result.shift = shift
@@ -97,9 +99,10 @@ proc change_shift(self: var PlaintextMessage; shift: int) =
 
 
 type
-  CiphertextMessage = object of Message
+  CiphertextMessage = ref object of Message
 
 proc newCiphertextMessage(text: string): CiphertextMessage =
+  new(result)
   result.message_text = text
   result.valid_words = loadWords(wordlist_filename)
 
