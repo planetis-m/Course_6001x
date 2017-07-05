@@ -11,6 +11,7 @@ type
   Rabbit = ref object of Animal
   Person = ref object of Animal
     friends: seq[Person]
+    ageDiffImpl: proc(p, other: Person)
 
 
 # -----------
@@ -68,10 +69,17 @@ proc newRabbit(name: string, age: int): Rabbit =
 
 proc personSpeak(a: Animal) = echo "Hello"
 proc personDollar(a: Animal): string = "person:" & a.name & ":" & $a.age
+proc personAgeDiff(p, other: Person) =
+  let diff = p.age - other.age
+  if p.age > other.age:
+    echo p.name, " is ", diff, " years older than ", other.name
+  else:
+    echo p.name, " is ", -diff, " years younger than ", other.name
 
 proc newPerson(name: string, age: int): Person =
   result = newAnimal(Person, name, age, personSpeak, personDollar)
   result.friends = @[]
+  result.ageDiffImpl = personAgeDiff
 
 proc getFriends(p: Person): seq[Person] = p.friends
 
@@ -80,11 +88,7 @@ proc addFriend(p, friend: Person) =
     p.friends.add(friend)
 
 proc ageDiff(p, other: Person) =
-  let diff = p.age - other.age
-  if p.age > other.age:
-    echo p.name, " is ", diff, " years older than ", other.name
-  else:
-    echo p.name, " is ", -diff, " years younger than ", other.name
+  if p.ageDiffImpl != nil: p.ageDiffImpl(p, other)
 
 
 let c = newCat("Tom", 1)
