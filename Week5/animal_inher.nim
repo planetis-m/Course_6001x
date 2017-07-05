@@ -70,9 +70,8 @@ proc personSpeak(a: Animal) = echo "Hello"
 proc personDollar(a: Animal): string = "person:" & a.name & ":" & $a.age
 
 proc newPerson(name: string, age: int): Person =
-  Person(name: name, age: age, friends: @[],
-         speakImpl: personSpeak, dollarImpl: personDollar
-  )
+  result = newAnimal(Person, name, age, personSpeak, personDollar)
+  result.friends = @[]
 
 proc getFriends(p: Person): seq[Person] = p.friends
 
