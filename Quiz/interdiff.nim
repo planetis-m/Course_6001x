@@ -16,33 +16,33 @@
 import tables
 
 let
-    d1 = {1:30, 2:20, 3:30, 5:80}.toTable()
-    d2 = {1:40, 2:50, 3:60, 4:70, 6:90}.toTable()
+   d1 = {1:30, 2:20, 3:30, 5:80}.toTable()
+   d2 = {1:40, 2:50, 3:60, 4:70, 6:90}.toTable()
 
 proc f(a, b: int): int =
-    a + b
+   a + b
 
 proc dict_interdiff(d1, d2: Table[int, int]): auto =
-    ##
-    ## d1, d2: dicts whose keys and values are integers
-    ## Returns a tuple of dictionaries according to the instructions above
-    ##
+   ##
+   ## d1, d2: dicts whose keys and values are integers
+   ## Returns a tuple of dictionaries according to the instructions above
+   ##
 
-    proc intersect(d1, d2: Table[int, int]): Table[int, int] =
-        result = initTable[int, int]()
-        for key in keys(d1):
-            if key in d2:
-                result[key] = f(d1[key], d2[key])
+   proc intersect(d1, d2: Table[int, int]): Table[int, int] =
+      result = initTable[int, int]()
+      for key in keys(d1):
+         if key in d2:
+               result[key] = f(d1[key], d2[key])
 
-    proc difference(d1, d2: Table[int, int]): Table[int, int] =
-        result = initTable[int, int]()
-        for key, val in pairs(d1):
-            if key notin d2:
-                result[key] = val
-        for key, val in pairs(d2):
-            if key notin d1:
-                result[key] = val
+   proc difference(d1, d2: Table[int, int]): Table[int, int] =
+      result = initTable[int, int]()
+      for key, val in pairs(d1):
+         if key notin d2:
+               result[key] = val
+      for key, val in pairs(d2):
+         if key notin d1:
+               result[key] = val
 
-    (inter: intersect(d1, d2), diff: difference(d1, d2))
+   (inter: intersect(d1, d2), diff: difference(d1, d2))
 
 echo dict_interdiff(d1, d2)

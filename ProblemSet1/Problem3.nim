@@ -15,15 +15,15 @@ var result = ""
 var temp = ""
 var m = 'a'
 for i in s:
-    #echo i, m, '\t', result, '\t', temp
-    if i < m:
-        if len(result) < len(temp):
-            result = temp
-        temp = ""
-    m = i
-    temp.add(i)
+   #echo i, m, '\t', result, '\t', temp
+   if i < m:
+      if len(result) < len(temp):
+         result = temp
+      temp = ""
+   m = i
+   temp.add(i)
 
 if len(result) < len(temp):
-    result = temp
+   result = temp
 
 echo "Longest substring in alphabetical order is: ", $result

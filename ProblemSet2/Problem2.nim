@@ -5,25 +5,25 @@
 # will be paid each month.
 
 let
-    annualInterestRate = 0.2 # annual interest rate as a decimal
-    monthlyInterestRate = annualInterestRate / 12.0
-    balance = 3329.0 # the outstanding balance on the credit card
+   annualInterestRate = 0.2 # annual interest rate as a decimal
+   monthlyInterestRate = annualInterestRate / 12.0
+   balance = 3329.0 # the outstanding balance on the credit card
 
 var
-    minimumPayment = 10.0
-    found = false # Used to exit the while loop
+   minimumPayment = 10.0
+   found = false # Used to exit the while loop
 
 while not found:
-    var testBalance = balance
+   var testBalance = balance
 
-    for i in 0 .. <12:
-        let unpaidBalance = testBalance - minimumPayment
-        let interest = monthlyInterestRate * unpaidBalance
-        testBalance = unpaidBalance + interest
+   for i in 1 .. 12:
+      let unpaidBalance = testBalance - minimumPayment
+      let interest = monthlyInterestRate * unpaidBalance
+      testBalance = unpaidBalance + interest
 
-    if testBalance <= 0.0:
-        found = true
-    else:
-        minimumPayment += 10.0
+   if testBalance <= 0.0:
+      found = true
+   else:
+      minimumPayment += 10.0
 
 echo "Lowest Payment: ", minimumPayment

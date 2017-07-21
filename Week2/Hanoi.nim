@@ -1,13 +1,13 @@
 
 proc echoMove(fr, to: string) {.inline.} =
-    echo "move from ", fr, " to ", to
+   echo "move from ", fr, " to ", to
 
-proc Towers(n: int, fr, to, spare: string) =
-    if n == 1:
-        echoMove(fr, to)
-    else:
-        Towers(n - 1, fr, spare, to)
-        Towers(1, fr, to, spare)
-        Towers(n - 1, spare, to, fr)
+proc towers(n: int, fr, to, spare: string) =
+   if n == 1:
+      echoMove(fr, to)
+   else:
+      towers(n - 1, fr, spare, to)
+      towers(1, fr, to, spare)
+      towers(n - 1, spare, to, fr)
 
-Towers(4, "P1", "P2", "P3")
+towers(4, "P1", "P2", "P3")

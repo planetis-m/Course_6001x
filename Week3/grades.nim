@@ -15,4 +15,4 @@ del(grades, "Ana")
 echo grades
 
 for key, value in pairs(grades):
-    echo key, ' ', value
+   echo key, ' ', value
