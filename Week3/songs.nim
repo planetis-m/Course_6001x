@@ -3,34 +3,35 @@ import tables, sequtils
 # Contains the she_loves_you sequence of strings
 include loadWords
 
-proc lyrics_to_frequencies(lyrics: seq[string]): Table[string, int] =
-    result = initTable[string, int]()
 
-    for word in lyrics:
-        result.mgetOrPut(word, 0) += 1
+proc lyrics_to_frequencies(lyrics: seq[string]): Table[string, int] =
+   result = initTable[string, int]()
+
+   for word in lyrics:
+      result.mgetOrPut(word, 0) += 1
 
 proc most_common_words(freqs: Table[string, int]): auto =
-    var words: seq[string] = @[]
-    let
-        values = toSeq(freqs.values)
-        best = max(values)
+   var words: seq[string] = @[]
+   let
+      values = toSeq(freqs.values)
+      best = max(values)
 
-    for key in keys(freqs):
-        if freqs[key] == best:
-            words.add(key)
-    return (words, best)
+   for key in keys(freqs):
+      if freqs[key] == best:
+         words.add(key)
+   return (words, best)
 
 proc words_often(freqs: var Table[string, int], minTimes: int): OrderedTable[seq[string], int] =
-    result = initOrderedTable[seq[string], int]()
-    var done = false
-    while not done:
-        let (words, best) = most_common_words(freqs)
-        if best >= minTimes:
-            result[words] = best
-            for word in words:
-                del(freqs, word)  #remove word from dictionary
-        else:
-            done = true
+   result = initOrderedTable[seq[string], int]()
+   var done = false
+   while not done:
+      let (words, best) = most_common_words(freqs)
+      if best >= minTimes:
+         result[words] = best
+         for word in words:
+            del(freqs, word)  #remove word from dictionary
+      else:
+         done = true
 
 
 var beatles = lyrics_to_frequencies(she_loves_you)
