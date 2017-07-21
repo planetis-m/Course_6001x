@@ -1,8 +1,8 @@
 import macros
 
 macro class*(head, body): untyped =
-  # The macro is immediate so that it doesn't
-  # resolve identifiers passed to it
+  # The absence of typed parameters make this macro immediate,
+  # it doesn't resolve identifiers passed to it.
   var typeName, baseName: NimNode
 
   # flag if object should be exported
@@ -25,11 +25,11 @@ macro class*(head, body): untyped =
   template typeDecl(a, b): untyped =
     type a = ref object of b
 
-  template typeDeclExp(a, b): untyped =
+  template typeDeclPub(a, b): untyped =
     type a* = ref object of b
 
   if exported:
-    result = getAst(typeDeclExp(typeName, baseName))
+    result = getAst(typeDeclPub(typeName, baseName))
   else:
     result = getAst(typeDecl(typeName, baseName))
 
@@ -45,7 +45,7 @@ macro class*(head, body): untyped =
     case node.kind
 
     of nnkMethodDef, nnkProcDef:
-      # check if it is not the ctor proc
+      # check if it is the ctor proc
       if node.name.kind != nnkAccQuoted and node.name.basename == ctorName:
         # specify the return type of the ctor proc
         node.params[0] = typeName
