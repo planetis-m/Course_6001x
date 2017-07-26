@@ -32,16 +32,16 @@ proc dict_interdiff(d1, d2: Table[int, int]): auto =
       result = initTable[int, int]()
       for key in keys(d1):
          if key in d2:
-               result[key] = f(d1[key], d2[key])
+            result[key] = f(d1[key], d2[key])
 
    proc difference(d1, d2: Table[int, int]): Table[int, int] =
       result = initTable[int, int]()
       for key, val in pairs(d1):
          if key notin d2:
-               result[key] = val
+            result[key] = val
       for key, val in pairs(d2):
          if key notin d1:
-               result[key] = val
+            result[key] = val
 
    (inter: intersect(d1, d2), diff: difference(d1, d2))
 

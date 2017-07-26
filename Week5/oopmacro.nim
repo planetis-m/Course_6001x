@@ -47,17 +47,17 @@ macro class*(head, body): untyped =
       of nnkMethodDef, nnkProcDef:
          # check if it is the ctor proc
          if node.name.kind != nnkAccQuoted and node.name.basename == ctorName:
-         # specify the return type of the ctor proc
-         node.params[0] = typeName
+            # specify the return type of the ctor proc
+            node.params[0] = typeName
          else:
-         # inject `self: T` into the arguments
-         node.params.insert(1, newIdentDefs(ident("self"), typeName))
+            # inject `self: T` into the arguments
+            node.params.insert(1, newIdentDefs(ident("self"), typeName))
          result.add(node)
 
       of nnkVarSection:
          # variables get turned into fields of the type.
          for n in node.children:
-         recList.add(n)
+            recList.add(n)
 
       else:
          result.add(node)
