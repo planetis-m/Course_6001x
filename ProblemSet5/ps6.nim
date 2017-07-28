@@ -1,4 +1,4 @@
-import algorithm, tables, strutils
+import tables, strutils
 include utils
 
 type
