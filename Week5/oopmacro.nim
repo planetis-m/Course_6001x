@@ -20,15 +20,15 @@ macro class*(head, body): untyped =
    else:
       error "Invalid node: " & head.lispRepr
 
+   # create a new stmtList for the result
+   result = newStmtList()
+
    # create a type section in the result
    template typeDecl(a, b): untyped =
       type a = ref object of b
 
    template typeDeclPub(a, b): untyped =
       type a* = ref object of b
-
-   # create a new stmtList for the result
-   result = newStmtList()
 
    if isExported:
       result.insert(0, getAst(typeDeclPub(typeName, baseName)))
