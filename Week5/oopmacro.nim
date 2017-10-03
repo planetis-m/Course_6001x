@@ -6,7 +6,7 @@ macro class*(head, body): untyped =
    var typeName, baseName: NimNode
 
    # flag if object should be exported
-   var exported: bool
+   var isExported: bool
 
    if head.kind == nnkCall:
       # `head` is expression `typeName(baseClass)`
@@ -16,8 +16,7 @@ macro class*(head, body): untyped =
       # `head` is expression `typeName*(baseClass)`
       typeName = head[1]
       baseName = head[2][0]
-      exported = true
-
+      isExported = true
    else:
       error "Invalid node: " & head.lispRepr
 
@@ -28,10 +27,13 @@ macro class*(head, body): untyped =
    template typeDeclPub(a, b): untyped =
       type a* = ref object of b
 
-   if exported:
-      result = getAst(typeDeclPub(typeName, baseName))
+   # create a new stmtList for the result
+   result = newStmtList()
+
+   if isExported:
+      result.insert(0, getAst(typeDeclPub(typeName, baseName)))
    else:
-      result = getAst(typeDecl(typeName, baseName))
+      result.insert(0, getAst(typeDecl(typeName, baseName)))
 
    # var declarations will be turned into object fields
    var recList = newNimNode(nnkRecList)
@@ -43,7 +45,6 @@ macro class*(head, body): untyped =
    # to the parameters of functions
    for node in body.children:
       case node.kind
-
       of nnkMethodDef, nnkProcDef:
          # check if it is the ctor proc
          if node.name.kind != nnkAccQuoted and node.name.basename == ctorName:
@@ -53,12 +54,10 @@ macro class*(head, body): untyped =
             # inject `self: T` into the arguments
             node.params.insert(1, newIdentDefs(ident("self"), typeName))
          result.add(node)
-
       of nnkVarSection:
          # variables get turned into fields of the type.
          for n in node.children:
             recList.add(n)
-
       else:
          result.add(node)
 
@@ -67,6 +66,9 @@ macro class*(head, body): untyped =
 
 
 when isMainModule:
+   dumpTree:
+      method vocalize(self: Animal) {.base.} =
+         echo "..."
    class Animal(RootObj):
       var age: int
       method vocalize {.base.} = echo "..."

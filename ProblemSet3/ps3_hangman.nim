@@ -11,6 +11,39 @@ randomize()
 
 const wordlist_filename = "words.txt"
 
+type
+   MsgKind = enum
+      meGreetPlayer,
+      meWordLength,
+      meRemainingGuesses,
+      meAvailableLetters,
+      mePromptGuess,
+      meGoodGuess,
+      meWrongGuess,
+      mwUnknownInput,
+      mwRepeatedGuess,
+      meGameSuccess,
+      meGameFailure
+
+const
+   messages: array[MsgKind, string] = [
+      meGreetPlayer: "Welcome to the game, Hangman!",
+      meWordLength: "I am thinking of a word that is $1 letters long.",
+
+      meRemainingGuesses: "You have $1 guesses left.",
+      meAvailableLetters: "Available Letters: ",
+      mePromptGuess: "Please guess a letter: ",
+
+      meGoodGuess: "Good guess: ",
+      meWrongGuess: "Oops! That letter is not in my word: ",
+
+      mwUnknownInput: "Sorry, I did not understand your input.",
+      mwRepeatedGuess: "Oops! You've already guessed that letter: ",
+
+      meGameSuccess: "Congratulations, you won!",
+      meGameFailure: "Sorry, you ran out of guesses. The word was $1."
+   ]
+
 proc loadWords(): seq[string] =
    #
    # Returns a list of valid words. Words are strings of lowercase letters.
@@ -103,27 +136,11 @@ proc hangman(secretWord: string) =
    #
    # Follows the other limitations detailed in the problem write-up.
    #
-   const
-      msg0 = "Welcome to the game, Hangman!"
-      msg1 = "I am thinking of a word that is $1 letters long."
 
-      msg2 = "You have $1 guesses left."
-      msg3 = "Available Letters: "
-      msg4 = "Please guess a letter: "
-
-      msg5 = "Good guess: "
-      msg6 = "Oops! That letter is not in my word: "
-      msg7 = "Oops! You've already guessed that letter: "
-
-      msg8 = "Congratulations, you won!"
-      msg9 = "Sorry, you ran out of guesses. The word was $1."
-
-      err0 = "Sorry, I did not understand your input."
-
-   echo msg0 # Greet the player
+   echo messages[meGreetPlayer]
 
    let n = len(secretWord)
-   echo msg1 % [$n] # Inform the player about the length of the word
+   echo messages[meWordLength] % [$n]
 
    var mistakesMade = 0
    var availableLetters = "abcdefghijklmnopqrstuvwxyz"
@@ -133,25 +150,26 @@ proc hangman(secretWord: string) =
       echo "-".repeat(13)
 
       let remainingTries = 8 - mistakesMade
-      echo msg2 % [$remainingTries] # Inform the player about the number of tries
-      echo msg3, availableLetters # Inform the player about the available letters
+      echo messages[meRemainingGuesses] % [$remainingTries]
+      echo messages[meAvailableLetters], availableLetters
 
-      let guess = readLineFromStdin(msg4).toLowerAscii() # get input from the player
+      # get input from the player
+      let guess = readLineFromStdin(messages[mePromptGuess]).toLowerAscii()
 
       if guess[0] notin Letters:
-         echo err0
+         echo messages[mwUnknownInput]
          continue # continue if guess is invalid
 
       if guess[0] in lettersGuessed:
-         echo msg7, getGuessedWord(secretWord, lettersGuessed)
+         echo messages[mwRepeatedGuess], getGuessedWord(secretWord, lettersGuessed)
          continue # continue when the player has already guessed that letter
 
       lettersGuessed.add(guess[0]) # add player's guess to the guessed letters
 
       if guess[0] in secretWord:
-         echo msg5, getGuessedWord(secretWord, lettersGuessed)
+         echo messages[meGoodGuess], getGuessedWord(secretWord, lettersGuessed)
       else:
-         echo msg6, getGuessedWord(secretWord, lettersGuessed)
+         echo messages[meWrongGuess], getGuessedWord(secretWord, lettersGuessed)
          inc(mistakesMade) # player loses a guess when he guesses incorrectly
 
       if isWordGuessed(secretWord, lettersGuessed):
@@ -161,13 +179,12 @@ proc hangman(secretWord: string) =
 
    echo "-".repeat(13)
    if isWordGuessed(secretWord, lettersGuessed):
-      echo msg8
+      echo messages[meGameSuccess]
    else:
-      echo msg9 % [$secretWord]
+      echo messages[meGameFailure] % [$secretWord]
 
 proc main() =
    let secretWord = chooseWord(wordlist).toLowerAscii()
-
    hangman(secretWord)
 
 when isMainModule:

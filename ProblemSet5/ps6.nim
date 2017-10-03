@@ -34,8 +34,8 @@ proc build_shift_dict(self: Message; shift: int): Table[char, char] =
    var
       letters = "abcdefghijklmnopqrstuvwxyz"
       letters_shifted = letters.repeat(2)[shift .. shift + 25]
-   letters = letters & letters.toUpperAscii()
-   letters_shifted = letters_shifted & letters_shifted.toUpperAscii()
+   letters.add letters.toUpperAscii()
+   letters_shifted.add letters_shifted.toUpperAscii()
    for i in 0 .. 51:
       result[letters[i]] = letters_shifted[i]
 
