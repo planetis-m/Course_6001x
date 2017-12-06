@@ -12,36 +12,36 @@ randomize()
 const wordlist_filename = "words.txt"
 
 type
-   MsgKind = enum
-      meGreetPlayer,
-      meWordLength,
-      meRemainingGuesses,
-      meAvailableLetters,
-      mePromptGuess,
-      meGoodGuess,
-      meWrongGuess,
-      mwUnknownInput,
-      mwRepeatedGuess,
-      meGameSuccess,
-      meGameFailure
+   MsgKind {.pure.} = enum
+      GreetPlayer,
+      WordLength,
+      RemainingGuesses,
+      AvailableLetters,
+      PromptGuess,
+      GoodGuess,
+      WrongGuess,
+      UnknownInput,
+      RepeatedGuess,
+      GameSuccess,
+      GameFailure
 
 const
    messages: array[MsgKind, string] = [
-      meGreetPlayer: "Welcome to the game, Hangman!",
-      meWordLength: "I am thinking of a word that is $1 letters long.",
+      GreetPlayer: "Welcome to the game, Hangman!",
+      WordLength: "I am thinking of a word that is $1 letters long.",
 
-      meRemainingGuesses: "You have $1 guesses left.",
-      meAvailableLetters: "Available Letters: ",
-      mePromptGuess: "Please guess a letter: ",
+      RemainingGuesses: "You have $1 guesses left.",
+      AvailableLetters: "Available Letters: ",
+      PromptGuess: "Please guess a letter: ",
 
-      meGoodGuess: "Good guess: ",
-      meWrongGuess: "Oops! That letter is not in my word: ",
+      GoodGuess: "Good guess: ",
+      WrongGuess: "Oops! That letter is not in my word: ",
 
-      mwUnknownInput: "Sorry, I did not understand your input.",
-      mwRepeatedGuess: "Oops! You've already guessed that letter: ",
+      UnknownInput: "Sorry, I did not understand your input.",
+      RepeatedGuess: "Oops! You've already guessed that letter: ",
 
-      meGameSuccess: "Congratulations, you won!",
-      meGameFailure: "Sorry, you ran out of guesses. The word was $1."
+      GameSuccess: "Congratulations, you won!",
+      GameFailure: "Sorry, you ran out of guesses. The word was $1."
    ]
 
 proc loadWords(): seq[string] =
@@ -137,10 +137,10 @@ proc hangman(secretWord: string) =
    # Follows the other limitations detailed in the problem write-up.
    #
 
-   echo messages[meGreetPlayer]
+   echo messages[GreetPlayer]
 
    let n = len(secretWord)
-   echo messages[meWordLength] % [$n]
+   echo messages[WordLength] % [$n]
 
    var mistakesMade = 0
    var availableLetters = "abcdefghijklmnopqrstuvwxyz"
@@ -150,26 +150,26 @@ proc hangman(secretWord: string) =
       echo "-".repeat(13)
 
       let remainingTries = 8 - mistakesMade
-      echo messages[meRemainingGuesses] % [$remainingTries]
-      echo messages[meAvailableLetters], availableLetters
+      echo messages[RemainingGuesses] % [$remainingTries]
+      echo messages[AvailableLetters], availableLetters
 
       # get input from the player
-      let guess = readLineFromStdin(messages[mePromptGuess]).toLowerAscii()
+      let guess = readLineFromStdin(messages[PromptGuess]).toLowerAscii()
 
       if guess[0] notin Letters:
-         echo messages[mwUnknownInput]
+         echo messages[UnknownInput]
          continue # continue if guess is invalid
 
       if guess[0] in lettersGuessed:
-         echo messages[mwRepeatedGuess], getGuessedWord(secretWord, lettersGuessed)
+         echo messages[RepeatedGuess], getGuessedWord(secretWord, lettersGuessed)
          continue # continue when the player has already guessed that letter
 
       lettersGuessed.add(guess[0]) # add player's guess to the guessed letters
 
       if guess[0] in secretWord:
-         echo messages[meGoodGuess], getGuessedWord(secretWord, lettersGuessed)
+         echo messages[GoodGuess], getGuessedWord(secretWord, lettersGuessed)
       else:
-         echo messages[meWrongGuess], getGuessedWord(secretWord, lettersGuessed)
+         echo messages[WrongGuess], getGuessedWord(secretWord, lettersGuessed)
          inc(mistakesMade) # player loses a guess when he guesses incorrectly
 
       if isWordGuessed(secretWord, lettersGuessed):
@@ -179,9 +179,9 @@ proc hangman(secretWord: string) =
 
    echo "-".repeat(13)
    if isWordGuessed(secretWord, lettersGuessed):
-      echo messages[meGameSuccess]
+      echo messages[GameSuccess]
    else:
-      echo messages[meGameFailure] % [$secretWord]
+      echo messages[GameFailure] % [$secretWord]
 
 proc main() =
    let secretWord = chooseWord(wordlist).toLowerAscii()

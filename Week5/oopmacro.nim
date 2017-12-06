@@ -12,7 +12,7 @@ macro class*(head, body): untyped =
       # `head` is expression `typeName(baseClass)`
       typeName = head[0]
       baseName = head[1]
-   elif head.kind == nnkInfix and head[0].ident == !"*" and head[2].kind == nnkPar:
+   elif head.kind == nnkInfix and $head[0] == "*" and head[2].kind == nnkPar:
       # `head` is expression `typeName*(baseClass)`
       typeName = head[1]
       baseName = head[2][0]
@@ -31,9 +31,9 @@ macro class*(head, body): untyped =
       type a* = ref object of b
 
    if isExported:
-      result.insert(0, getAst(typeDeclPub(typeName, baseName)))
+      result.add getAst(typeDeclPub(typeName, baseName))
    else:
-      result.insert(0, getAst(typeDecl(typeName, baseName)))
+      result.add getAst(typeDecl(typeName, baseName))
 
    # var declarations will be turned into object fields
    var recList = newNimNode(nnkRecList)
@@ -56,8 +56,7 @@ macro class*(head, body): untyped =
          result.add(node)
       of nnkVarSection:
          # variables get turned into fields of the type.
-         for n in node.children:
-            recList.add(n)
+         node.copyChildrenTo(recList)
       else:
          result.add(node)
 
@@ -66,9 +65,6 @@ macro class*(head, body): untyped =
 
 
 when isMainModule:
-   dumpTree:
-      method vocalize(self: Animal) {.base.} =
-         echo "..."
    class Animal(RootObj):
       var age: int
       method vocalize {.base.} = echo "..."
