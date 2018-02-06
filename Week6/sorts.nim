@@ -11,14 +11,14 @@ proc swapSort[T](s: var seq[T]) =
             swap(s[i], s[j])
 
 proc bubbleSort[T](s: var seq[T]) =
-   var swap = false
+   var swapped = true
    var n = len(s)
-   while not swap:
-      swap = true
+   while swapped:
+      swapped = false
       for j in 1 ..< n:
          if s[j-1] > s[j]:
-            swap = false
             swap(s[j-1], s[j])
+            swapped = true
       dec(n)
 
 proc selSort[T](s: var seq[T]) =
@@ -36,7 +36,7 @@ proc merge[T](left, right: seq[T]): seq[T] =
    result = @[]
    var i, j = 0
    while i < len(left) and j < len(right):
-      if left[i] <= right[j]:
+      if left[i] < right[j]:
          result.add(left[i])
          inc(i)
       else:
@@ -64,6 +64,9 @@ shuffle(l)
 
 #bogoSort(l)
 #swapSort(l)
-#bubbleSort(l)
+bubbleSort(l)
+
 #selSort(l)
-echo mergeSort(l)
+#echo mergeSort(l)
+
+echo l
