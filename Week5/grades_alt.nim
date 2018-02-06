@@ -13,6 +13,10 @@ type
 
 var nextIdNum = 0 # next ID number to assign
 
+# ---------------------
+# Student type routines
+# ---------------------
+
 template studentImpl() =
    result.name = name
    result.idNum = nextIdNum
@@ -48,6 +52,10 @@ type
       students: seq[Student]
       grades: Table[int, float] # a multiple-key table
       isSorted: bool
+
+# -------------------
+# Grade type routines
+# -------------------
 
 proc initGrades(): Grades =
    ## Create empty grade book
@@ -102,6 +110,10 @@ proc gradeReport(course: var Grades): string =
       else:
          report.add($s & " has no grades")
    result = join(report, "\n")
+
+# -----------
+# Course Code
+# -----------
 
 var ug1 = initUG("Matt Damon", 2018)
 var ug2 = initUG("Ben Affleck", 2019)
