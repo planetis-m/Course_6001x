@@ -36,7 +36,7 @@ proc merge[T](left, right: seq[T]): seq[T] =
    result = @[]
    var i, j = 0
    while i < len(left) and j < len(right):
-      if left[i] < right[j]:
+      if left[i] <= right[j]:
          result.add(left[i])
          inc(i)
       else:
@@ -53,9 +53,9 @@ proc mergeSort[T](s: seq[T]): seq[T] =
    if len(s) < 2:
       return s
    else:
-      var middle = len(s) div 2
-      var left = mergeSort(s[0 ..< middle])
-      var right = mergeSort(s[middle ..< ^1])
+      let middle = len(s) div 2
+      let left = mergeSort(s[0 ..< middle])
+      let right = mergeSort(s[middle .. ^1])
       return merge(left, right)
 
 
