@@ -3,21 +3,21 @@ import algorithm, rdstdin, strutils
 let file_name = readLineFromStdin("Provide a name of a file of data: ")
 
 var data: seq[seq[string]] = @[]
+
 var fh: File
 var succeeded = true
-
 try:
    fh = open(file_name, fmRead)
 except IOError:
    succeeded = false
-   echo("cannot open", file_name)
+   echo("cannot open ", file_name)
 finally:
    if succeeded:
       for line in lines(fh):
          if line != "\n":
             let it = line.strip.split(", ") #remove trailing \n
             data.add(it)
-   close(fh) # close file even if fail
+      close(fh)
 
 var gradesData: seq[(seq[string], seq[int])] = @[]
 
