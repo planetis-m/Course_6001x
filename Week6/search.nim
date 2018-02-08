@@ -20,7 +20,7 @@ proc bisection_search1[T](s: seq[T]; e: T): bool =
       if s[half] > e:
          return bisection_search1(s[0 ..< half], e)
       else:
-         return bisection_search1(s[half ..< ^1], e)
+         return bisection_search1(s[half .. ^1], e)
 
 proc bisection_search2[T](s: seq[T]; e: T): bool =
    proc helper(s: seq[T]; e: T; low, high: int): bool =

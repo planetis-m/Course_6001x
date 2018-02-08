@@ -4,24 +4,18 @@ proc bogoSort[T](s: var seq[T]) =
    while not isSorted(s, cmp):
       shuffle(s)
 
-proc swapSort[T](s: var seq[T]) =
-   for i in 0 ..< len(s):
-      for j in i + 1 ..< len(s):
-         if s[j] < s[i]:
-            swap(s[i], s[j])
-
 proc bubbleSort[T](s: var seq[T]) =
    var swapped = true
    var n = len(s)
    while swapped:
       swapped = false
       for j in 1 ..< n:
-         if s[j-1] > s[j]:
-            swap(s[j-1], s[j])
+         if s[j - 1] > s[j]:
+            swap(s[j - 1], s[j])
             swapped = true
       dec(n)
 
-proc selSort[T](s: var seq[T]) =
+proc selectionSort[T](s: var seq[T]) =
    for i in 0 ..< len(s):
       var minIndex = i
       var minVal = s[i]
@@ -31,6 +25,15 @@ proc selSort[T](s: var seq[T]) =
             minIndex = j
             minVal = s[j]
       swap(s[i], s[minIndex])
+
+proc insertionSort[T](s: var seq[T]) =
+   for i in 0 ..< len(s):
+      let x = s[i]
+      var j = i - 1
+      while j >= 0 and s[j] > x:
+         s[j + 1] = s[j]
+         dec(j)
+      s[j + 1] = x
 
 proc merge[T](left, right: seq[T]): seq[T] =
    result = @[]
@@ -59,14 +62,15 @@ proc mergeSort[T](s: seq[T]): seq[T] =
       return merge(left, right)
 
 
-var l = @[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-shuffle(l)
+var list = @[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-#bogoSort(l)
-#swapSort(l)
-bubbleSort(l)
+template test(sort) =
+   var clist = list
+   shuffle(clist)
+   sort(clist)
+   assert clist == list
 
-#selSort(l)
-#echo mergeSort(l)
-
-echo l
+test(bubbleSort)
+test(selectionSort)
+test(insertionSort)
+#test(mergeSort)
