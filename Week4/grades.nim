@@ -1,20 +1,28 @@
-import tables, math
+import math
+{.floatChecks: on.}
 
 proc avg(grades: seq[float]): float =
-   assert len(grades) > 0, "No grades data"
-   sum(grades) / len(grades).float
+   try:
+      result = sum(grades) / len(grades).float
+   except FloatInvalidOpError:
+      echo("no grades data")
+      result = 0.0
 
-proc get_stats(class_list: Table[seq[string], seq[float]]): auto =
-   result = initTable[seq[string], tuple[a: seq[float], b: float]]()
-   for name, grades in class_list.pairs():
-      result.add (name, (grades, avg(grades)))
+# proc avg(grades: seq[float]): float =
+#    assert len(grades) > 0, "No grades data"
+#    sum(grades) / len(grades).float
 
-let test_grades = {
+proc getStats(classList: seq[(seq[string], seq[float])]): auto =
+   result = newSeq[(seq[string], seq[float], float)]()
+   for name, grades in items(classList):
+      result.add (name, grades, avg(grades))
+
+let testGrades = @{
    @["peter", "parker"]: @[10.0, 5.0, 85.0],
    @["bruce", "wayne"]: @[10.0, 8.0, 74.0],
    @["captain", "america"]: @[8.0, 10.0, 96.0],
    @["deadpool"]: @[]
-}.toTable
+}
 
-echo test_grades
-echo get_stats(test_grades)
+echo testGrades
+echo getStats(testGrades)
