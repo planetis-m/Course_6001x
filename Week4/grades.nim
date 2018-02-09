@@ -5,11 +5,11 @@ proc avg(grades: seq[float]): float =
    try:
       result = sum(grades) / len(grades).float
    except FloatInvalidOpError:
-      echo("no grades data")
+      echo("No grades data")
       result = 0.0
 
 # proc avg(grades: seq[float]): float =
-#    assert len(grades) > 0, "No grades data"
+#    assert len(grades) != 0, "No grades data"
 #    sum(grades) / len(grades).float
 
 proc getStats(classList: seq[(seq[string], seq[float])]): auto =

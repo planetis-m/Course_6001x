@@ -3,9 +3,9 @@ import algorithm, rdstdin, strutils
 let file_name = readLineFromStdin("Provide a name of a file of data: ")
 
 var data: seq[seq[string]] = @[]
-
 var fh: File
 var succeeded = true
+
 try:
    fh = open(file_name, fmRead)
 except IOError:
@@ -21,12 +21,11 @@ finally:
 
 var gradesData: seq[(seq[string], seq[int])] = @[]
 
-if len(data) != 0:
-   for student in data:
-      try:
-         let name = student[0 .. ^1]
-         let grades = parseInt(student[^1])
-         gradesData.add((name, @[grades]))
-      except ValueError:
-         echo student
-         gradesData.add((student, @[]))
+for student in data:
+   try:
+      let name = student[0 .. ^2]
+      let grades = parseInt(student[^1])
+      gradesData.add((name, @[grades]))
+   except ValueError:
+      echo student
+      gradesData.add((student, @[]))
