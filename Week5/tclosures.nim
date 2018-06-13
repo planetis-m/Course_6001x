@@ -1,6 +1,6 @@
 type
    PExpr = ref object of RootObj ## abstract base class for an expression
-      evalImpl: proc(e: PExpr): int
+      evalImpl: proc(e: PExpr): int {.nimcall.}
    PLiteral = ref object of PExpr
       x: int
    PPlusExpr = ref object of PExpr

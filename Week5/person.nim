@@ -11,7 +11,7 @@ proc newPerson(name: string): Person =
    result.lastname = captureBetween(name, ' ')
 
 proc setBirthDay(self: var Person; month, day, year: int) =
-   self.birthday = initInterval(days = day, months = month, years = year)
+   self.birthday = initTimeInterval(days = day, months = month, years = year)
 
 proc getLastName(self: Person): string =
    result = self.lastname

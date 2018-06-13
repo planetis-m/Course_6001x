@@ -24,22 +24,22 @@ macro class*(head, body): untyped =
    result = newStmtList()
 
    # create a type section in the result
-   template typeDecl(a, b): untyped =
+   template declare(a, b): untyped =
       type a = ref object of b
 
-   template typeDeclPub(a, b): untyped =
+   template declarePub(a, b): untyped =
       type a* = ref object of b
 
    if isExported:
-      result.add getAst(typeDeclPub(typeName, baseName))
+      result.add getAst(declarePub(typeName, baseName))
    else:
-      result.add getAst(typeDecl(typeName, baseName))
+      result.add getAst(declare(typeName, baseName))
 
    # var declarations will be turned into object fields
    var recList = newNimNode(nnkRecList)
 
    # expected name of ctor by convention
-   let ctorName = newIdentNode("new" & $typeName)
+   let ctorName = "new" & $typeName
 
    # Iterate over the statements, adding `self: T`
    # to the parameters of functions
@@ -47,7 +47,7 @@ macro class*(head, body): untyped =
       case node.kind
       of nnkMethodDef, nnkProcDef:
          # check if it is the ctor proc
-         if node.name.kind != nnkAccQuoted and node.name.basename == ctorName:
+         if node.name.kind != nnkAccQuoted and eqIdent(ctorName, $node.name.basename):
             # specify the return type of the ctor proc
             node.params[0] = typeName
          else:
