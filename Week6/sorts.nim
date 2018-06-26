@@ -1,10 +1,20 @@
 import algorithm, random
 
+type
+   Iterable = concept c
+      for x in items(c): discard
+
+   Indexable[T] = concept c
+      var i: int
+      c[i] is T
+      c.len is int
+
 proc bogoSort[T](s: var seq[T]) =
    while not isSorted(s, cmp):
+      # nextPermutation(s)
       shuffle(s)
 
-proc bubbleSort[T](s: var seq[T]) =
+proc bubbleSort[T](s: var Indexable[T]) =
    var swapped = true
    var n = len(s)
    while swapped:
@@ -15,7 +25,7 @@ proc bubbleSort[T](s: var seq[T]) =
             swapped = true
       dec(n)
 
-proc selectionSort[T](s: var seq[T]) =
+proc selectionSort[T](s: var Indexable[T]) =
    for i in 0 ..< len(s):
       var minIndex = i
       var minVal = s[i]
@@ -26,7 +36,7 @@ proc selectionSort[T](s: var seq[T]) =
             minVal = s[j]
       swap(s[i], s[minIndex])
 
-proc insertionSort[T](s: var seq[T]) =
+proc insertionSort[T](s: var Indexable[T]) =
    for i in 0 ..< len(s):
       let x = s[i]
       var j = i - 1
@@ -52,7 +62,7 @@ proc merge[T](left, right: seq[T]): seq[T] =
       result.add(right[j])
       inc(j)
 
-proc mergeSort[T](s: seq[T]): seq[T] =
+proc mergeSort[T](s: Indexable[T]): seq[T] =
    if len(s) < 2:
       return s
    else:
@@ -62,15 +72,16 @@ proc mergeSort[T](s: seq[T]): seq[T] =
       return merge(left, right)
 
 
-var list = @[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+when isMainModule:
+   template test(sort) =
+      var clist = list
+      shuffle(clist)
+      sort(clist)
+      assert clist == list
 
-template test(sort) =
-   var clist = list
-   shuffle(clist)
-   sort(clist)
-   assert clist == list
+   const list = @[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-test(bubbleSort)
-test(selectionSort)
-test(insertionSort)
-#test(mergeSort)
+   test(bubbleSort)
+   test(selectionSort)
+   test(insertionSort)
+   #test(mergeSort)

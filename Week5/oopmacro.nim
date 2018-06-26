@@ -6,9 +6,28 @@ type
       typeName, baseName, recList: NimNode
       ctorName: string
 
+iterator dfTraversal(n: NimNode): NimNode =
+   var stack = newSeq[tuple[n: NimNode, i: int]]()
+   stack.add((n: n, i: 0))
+   yield stack[^1].n
+   while stack.len > 0:
+      template i: untyped = stack[^1].i
+      template n: untyped = stack[^1].n
+      while i < n.len:
+         let child = n[i]
+         i.inc
+         stack.add((n: child, i: 0))
+         yield stack[^1].n
+      discard stack.pop
+
 proc insertSelf(node: NimNode, b: ClassBuilder): NimNode =
+#    for n in node.dfTraversal:
+#       if n.kind == nnkIdent:
+#          echo n.repr
+
    case node.kind
    of nnkIdent:
+#       echo node.repr
       for r in b.recList:
          for i in 0 .. r.len - 3:
             if eqIdent($node, $r[i]):
@@ -30,7 +49,8 @@ proc transform(node: NimNode, b: ClassBuilder): NimNode =
          # inject `self: T` into the arguments
          node.params.insert(1, newIdentDefs(ident("self"), b.typeName))
          # automatic self insertion for object fields
-         result = insertSelf(node, b)
+         discard insertSelf(node, b)
+         result = node
    of nnkVarSection:
       # variables get turned into fields of the type.
       node.copyChildrenTo(b.recList)
@@ -86,14 +106,14 @@ when isMainModule:
    class Animal(RootObj):
       var age: int
       method vocalize {.base.} = echo "..."
-      proc `$`: string = "animal:" & $age
+      proc `$`: string = "animal:" & $self.age
 
    class Person(Animal):
       var name: string
       proc newPerson(name: string, age: int) =
          result = Person(name: name, age: age)
       method vocalize = echo "Hey"
-      proc `$`: string = "person:" & name & ":" & $self.age
+      proc `$`: string = "person:" & self.name & ":" & $self.age
 
    let john = newPerson("John", 10)
    john.vocalize()

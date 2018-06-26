@@ -1,5 +1,5 @@
 proc intToStr(n: int): string =
-   let digits = "0123456789"
+   const digits = "0123456789"
    var n = n
    if n == 0:
       return "0"

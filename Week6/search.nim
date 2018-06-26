@@ -1,16 +1,25 @@
-proc linear_search[T](s: seq[T]; e: T): bool =
+type
+   Iterable[T] = concept c
+      for x in items(c): x is T
+
+   Indexable[T] = concept c
+      var i: int
+      c[i] is T
+      c.len is int
+
+proc linearSearch[T](s: Iterable[T]; e: T): bool =
    for v in s:
       if v == e:
          result = true
 
-proc search[T](s: seq[T]; e: T): bool =
+proc search[T](s: Iterable[T]; e: T): bool =
    for v in s:
       if v == e:
          return true
       if v > e:
          return false
 
-proc bisection_search1[T](s: seq[T]; e: T): bool =
+proc bisectionSearch1[T](s: Indexable[T]; e: T): bool =
    if len(s) == 0:
       return false
    elif len(s) == 1:
@@ -18,12 +27,12 @@ proc bisection_search1[T](s: seq[T]; e: T): bool =
    else:
       let half = len(s) div 2
       if s[half] > e:
-         return bisection_search1(s[0 ..< half], e)
+         return bisectionSearch1(s[0 ..< half], e)
       else:
-         return bisection_search1(s[half .. ^1], e)
+         return bisectionSearch1(s[half .. ^1], e)
 
-proc bisection_search2[T](s: seq[T]; e: T): bool =
-   proc helper(s: seq[T]; e: T; low, high: int): bool =
+proc bisectionSearch2[T](s: Indexable[T]; e: T): bool =
+   proc helper(s: Indexable[T]; e: T; low, high: int): bool =
       if high == low:
          return s[low] == e
       let mid = (low + high) div 2
@@ -39,24 +48,24 @@ proc bisection_search2[T](s: seq[T]; e: T): bool =
    if len(s) == 0:
       return false
    else:
-      return helper(s, e, 0, len(s)-1)
+      return helper(s, e, 0, len(s) - 1)
 
+when isMainModule:
+   let l = @[5, 1, 3, 2]
+   let sl = @[1, 2, 3, 5]
 
-let l = @[5, 1, 3, 2]
-let sl = @[1, 2, 3, 5]
+   echo l.linearSearch(4)
+   echo l.linearSearch(1)
+   echo l.linearSearch(6)
 
-echo l.linear_search(4)
-echo l.linear_search(1)
-echo l.linear_search(6)
+   echo sl.search(6)
+   echo sl.search(4)
+   echo sl.search(2)
 
-echo sl.search(6)
-echo sl.search(4)
-echo sl.search(2)
+   echo sl.bisectionSearch1(4)
+   echo sl.bisectionSearch1(1)
+   echo sl.bisectionSearch1(6)
 
-echo sl.bisection_search1(4)
-echo sl.bisection_search1(1)
-echo sl.bisection_search1(6)
-
-echo sl.bisection_search2(4)
-echo sl.bisection_search2(1)
-echo sl.bisection_search2(6)
+   echo sl.bisectionSearch2(4)
+   echo sl.bisectionSearch2(1)
+   echo sl.bisectionSearch2(6)
