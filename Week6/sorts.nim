@@ -37,7 +37,7 @@ proc selectionSort[T](s: var Indexable[T]) =
       swap(s[i], s[minIndex])
 
 proc insertionSort[T](s: var Indexable[T]) =
-   for i in 0 ..< len(s):
+   for i in 1 ..< len(s):
       let x = s[i]
       var j = i - 1
       while j >= 0 and s[j] > x:

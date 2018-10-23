@@ -2,10 +2,33 @@
 # Common functions
 # (shared by both games)
 
-import random
+import random, tables
 
 # Initializes the random number generator
 randomize()
+
+const
+   vowels = "aeiou"
+   consonants = "bcdfghjklmnpqrstvwxyz"
+
+   scrabbleLetterValues = toTable({
+      'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1,
+      'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1,
+      's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10})
+
+proc getFrequencyDict(sequence: string): CountTable[char] =
+   #
+   # Returns a dictionary where the keys are elements of the sequence
+   # and the values are integer counts, for the number of times that
+   # an element is repeated in the sequence.
+   #
+   # sequence: string
+   # return: dictionary
+   #
+   # freqs: dictionary (char -> int)
+   result = initCountTable[char]()
+   for x in sequence:
+      result.inc(x)
 
 proc getWordScore*(word: string, n: int): int =
    #
@@ -23,7 +46,7 @@ proc getWordScore*(word: string, n: int): int =
    # returns: int >= 0
    #
    for c in word:
-      result += scrabble_letter_values[c]
+      result += scrabbleLetterValues[c]
    result *= len(word)
    if len(word) == n:
       result += 50
@@ -60,12 +83,12 @@ proc dealHand*(n: int): CountTable[char] =
    result = initCountTable[char]()
    let numVowels = n div 3
 
-   for i in 0 .. <numVowels:
-      let x = vowels[random(len(vowels))]
+   for i in 0 ..< numVowels:
+      let x = rand(vowels)
       result.inc(x)
 
-   for i in numVowels .. <n:
-      let x = consonants[random(len(consonants))]
+   for i in numVowels ..< n:
+      let x = rand(consonants)
       result.inc(x)
 
 #
@@ -122,5 +145,5 @@ proc calculateHandlen*(hand: CountTable[char]): int =
    # returns: integer
    #
    result = 0
-   for k in hand.keys():
-      result += hand[k]
+   for k, v in hand.pairs():
+      result += v

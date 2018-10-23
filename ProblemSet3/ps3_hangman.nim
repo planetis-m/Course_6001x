@@ -9,7 +9,7 @@ import os, random, rdstdin, strtabs, strutils
 # Initializes the random number generator
 randomize()
 
-const wordlist_filename = "words.txt"
+const wordlistFilename = "words.txt"
 
 type
    MsgKind {.pure.} = enum
@@ -29,17 +29,13 @@ const
    messages: array[MsgKind, string] = [
       GreetPlayer: "Welcome to the game, Hangman!",
       WordLength: "I am thinking of a word that is $1 letters long.",
-
       RemainingGuesses: "You have $1 guesses left.",
       AvailableLetters: "Available Letters: ",
       PromptGuess: "Please guess a letter: ",
-
       GoodGuess: "Good guess: ",
       WrongGuess: "Oops! That letter is not in my word: ",
-
       UnknownInput: "Sorry, I did not understand your input.",
       RepeatedGuess: "Oops! You've already guessed that letter: ",
-
       GameSuccess: "Congratulations, you won!",
       GameFailure: "Sorry, you ran out of guesses. The word was $1."
    ]
@@ -53,7 +49,7 @@ proc loadWords(): seq[string] =
    #
    echo "Loading word list from file..."
    # inFile: file
-   var inFile = open(wordlist_filename)
+   var inFile = open(wordlistFilename)
    # line: string
    let line = inFile.readLine()
    # wordlist: sequence of strings

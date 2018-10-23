@@ -1,10 +1,6 @@
 import rdstdin, strtabs, strutils, tables
 import scrabble
 
-include utils
-include rewrites
-include funcs
-
 #
 #
 # Computer chooses a word
@@ -131,10 +127,10 @@ proc playGame(wordList: seq[string]) =
       while player != "u" or player != "c":
          player = readLineFromStdin("Enter u to have yourself play, c to have the computer play: ")
          if player == "u":
-            playHand(hand, wordList, hand_size)
+            playHand(hand, wordList, handSize)
             break
          elif player == "c":
-            compPlayHand(hand, wordList, hand_size)
+            compPlayHand(hand, wordList, handSize)
             break
          else:
             echo "Invalid command."
@@ -142,7 +138,7 @@ proc playGame(wordList: seq[string]) =
    while true:
       let choice = readLineFromStdin("Enter n to deal a new hand, r to replay the last hand, or e to end game: ")
       if choice == "n":
-         hand = dealHand(hand_size)
+         hand = dealHand(handSize)
          playerChoice()
       elif choice == "r":
          if len(hand) == 0:

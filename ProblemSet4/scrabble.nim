@@ -1,10 +1,17 @@
 # The 6.00 Word Game
 
-import rdstdin, strtabs, strutils, tables
+import rdstdin, strutils, tables
 
-include utils
-include rewrites
-include funcs
+import utils
+import rewrites
+import funcs
+
+export utils
+export rewrites
+export funcs
+
+const
+   handSize* = 7
 
 proc playHand*(hand: CountTable[char], wordList: seq[string], n: int) =
    #
@@ -86,13 +93,13 @@ proc playGame(wordList: seq[string]) =
    while true:
       let choice = readLineFromStdin("Enter n to deal a new hand, r to replay the last hand, or e to end game: ")
       if choice == "n":
-         hand = dealHand(hand_size)
-         playHand(hand, wordList, hand_size)
+         hand = dealHand(handSize)
+         playHand(hand, wordList, handSize)
       elif choice == "r":
          if len(hand) == 0:
             echo "You have not played a hand yet. Please play a new hand first!"
          else:
-            playHand(hand, wordList, hand_size)
+            playHand(hand, wordList, handSize)
       elif choice != "e":
          echo "Invalid command."
       else:
