@@ -2,7 +2,7 @@
 # Helper code
 # (you don't need to understand this helper code)
 
-import os, strutils
+import strutils
 
 const wordlistFilename = "words.txt"
 
@@ -24,8 +24,8 @@ proc loadWords*(): seq[string] =
    # take a while to finish.
    #
    echo "Loading word list from file..."
-   result = @[]
+   result = newSeqOfCap[string](83667)
    withFile(inFile, wordlistFilename):
       for line in lines(inFile):
          result.add(line.strip().toLowerAscii())
-   echo "  ", len(result), " words loaded."
+   echo "  ", result.len, " words loaded."

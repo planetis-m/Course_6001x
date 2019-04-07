@@ -27,7 +27,7 @@ proc loadWords(filename: string): seq[string] =
    # inFile: file
    withFile(inFile, filename):
       # line: string
-      let line = in_file.readLine()
+      let line = inFile.readLine()
       result = line.split()
    echo "  ", len(result), " words loaded."
 

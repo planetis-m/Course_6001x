@@ -1,4 +1,4 @@
-import rdstdin, strtabs, strutils, tables
+import rdstdin, strutils, tables, random, algorithm
 import scrabble
 
 #
@@ -24,8 +24,6 @@ proc compChooseWord(hand: CountTable[char], wordList: seq[string], n: int): stri
    #
    # Create a new variable to store the maximum score seen so far (initially 0)
    var bestScore = 0
-   # Create a new variable to store the best word seen so far (initially None)
-   var bestWord: string
    # For each word in the wordList
    for word in wordList:
       # If you can construct the word from your hand
@@ -36,12 +34,12 @@ proc compChooseWord(hand: CountTable[char], wordList: seq[string], n: int): stri
          if score > bestScore:
             # update your best score, and best word accordingly
             bestScore = score
-            bestWord = word
-   # return the best word you found.
-   return bestWord
+            result = word
 
 #
+#
 # Computer plays a hand
+#
 #
 proc compPlayHand(hand: CountTable[char], wordList: seq[string], n: int) =
    #
@@ -65,37 +63,38 @@ proc compPlayHand(hand: CountTable[char], wordList: seq[string], n: int) =
    var hand = hand
    # Keep track of the total score
    var totalScore = 0
+   var endGame = false
    # As long as there are still letters left in the hand:
-   while calculateHandlen(hand) > 0:
+   while calculateHandlen(hand) > 0 and not endGame:
       # Display the hand
-      echo "Current Hand: ", displayHand(hand)
+      echo messages[CurrentHand], displayHand(hand)
       # computer's word
       let word = compChooseWord(hand, wordList, n)
       # If the input is a single period:
-      if isNil(word):
+      if word == "":
          # End the game (break out of the loop)
-         break
-
+         endGame = true
       # Otherwise (the input is not a single period):
       else:
          # If the word is not valid:
          if not isValidWord(word, hand, wordList):
-            echo "This is a terrible error! I need to check my own code!"
-            break
+            echo messages[TerribleError]
+            endGame = true # Fail gracefully (break out of the loop)
          # Otherwise (the word is valid):
          else:
             # Tell the user how many points the word earned, and the updated total score 
             let score = getWordScore(word, n)
             totalScore += score
-            echo "$1 earned $2 points. Total: $3 points" % [$word, $score, $totalScore]
-            echo ""
+            echo messages[CurrentScore].format(word, score, totalScore)
             # Update hand and show the updated hand to the user
             hand = updateHand(hand, word)
    # Game is over (user entered a '.' or ran out of letters), so tell user the total score
-   echo "Total score: $1 points." % [$totalScore]
+   echo messages[ScoreComputer].format(totalScore)
 
 #
+#
 # Problem #6: Playing a game
+#
 #
 proc playGame(wordList: seq[string]) =
    #
@@ -124,38 +123,42 @@ proc playGame(wordList: seq[string]) =
 
    proc playerChoice() =
       var player: string
-      while player != "u" or player != "c":
-         player = readLineFromStdin("Enter u to have yourself play, c to have the computer play: ")
+      while player != "u" and player != "c":
+         player = readLineFromStdin(messages[PlayerChoice])
          if player == "u":
             playHand(hand, wordList, handSize)
-            break
          elif player == "c":
             compPlayHand(hand, wordList, handSize)
-            break
          else:
-            echo "Invalid command."
+            echo messages[InvalidCmd]
 
-   while true:
-      let choice = readLineFromStdin("Enter n to deal a new hand, r to replay the last hand, or e to end game: ")
+   var exitGame = false
+   while not exitGame:
+      let choice = readLineFromStdin(messages[MenuChoice])
       if choice == "n":
          hand = dealHand(handSize)
          playerChoice()
       elif choice == "r":
          if len(hand) == 0:
-            echo "You have not played a hand yet. Please play a new hand first!"
+            echo messages[NoHand]
          else:
             playerChoice()
       elif choice != "e":
-         echo "Invalid command."
+         echo messages[InvalidCmd]
       else:
-         break
+         exitGame = true
 
+#
 #
 # Build data structures used for entire session and play game
 #
+#
 proc main() =
-   let wordlist = loadWords()
+   # Initializes the random number generator
+   randomize()
+   var wordlist = loadWords()
+   # isValidWord calls binarySearch, so wordlist needs to be ordered.
+   sort(wordList)
    playGame(wordList)
 
-when isMainModule:
-   main()
+main()

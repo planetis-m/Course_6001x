@@ -3,20 +3,19 @@
 # (shared by both games)
 
 import random, tables
-
-# Initializes the random number generator
-randomize()
+import rewrites
 
 const
    vowels = "aeiou"
    consonants = "bcdfghjklmnpqrstvwxyz"
 
    scrabbleLetterValues = toTable({
-      'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1,
-      'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1,
-      's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10})
+      'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2,
+      'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1,
+      'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1,
+      'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10})
 
-proc getFrequencyDict(sequence: string): CountTable[char] =
+proc getFrequencyDict*(sequence: string): CountTable[char] =
    #
    # Returns a dictionary where the keys are elements of the sequence
    # and the values are integer counts, for the number of times that
@@ -26,11 +25,9 @@ proc getFrequencyDict(sequence: string): CountTable[char] =
    # return: dictionary
    #
    # freqs: dictionary (char -> int)
-   result = initCountTable[char]()
-   for x in sequence:
-      result.inc(x)
+   result = toCountTable[char](sequence)
 
-proc getWordScore*(word: string, n: int): int =
+proc getWordScore*(word: string, n: int): Natural =
    #
    # Returns the score for a word. Assumes the word is a valid word.
    #
@@ -47,8 +44,8 @@ proc getWordScore*(word: string, n: int): int =
    #
    for c in word:
       result += scrabbleLetterValues[c]
-   result *= len(word)
-   if len(word) == n:
+   result *= word.len
+   if word.len == n:
       result += 50
 
 proc displayHand*(hand: CountTable[char]): string =
@@ -63,10 +60,10 @@ proc displayHand*(hand: CountTable[char]): string =
    #
    # hand: dictionary (string -> int)
    #
-   result = ""
-   for letter, times in pairs(hand):
+   for letter, times in hand.pairs:
       for i in 1 .. times:
-         result.add(letter & ' ')
+         result.add(letter)
+         result.add(' ')
 
 proc dealHand*(n: int): CountTable[char] =
    #
@@ -82,14 +79,10 @@ proc dealHand*(n: int): CountTable[char] =
    #
    result = initCountTable[char]()
    let numVowels = n div 3
-
    for i in 0 ..< numVowels:
-      let x = rand(vowels)
-      result.inc(x)
-
+      result.inc(sample(vowels))
    for i in numVowels ..< n:
-      let x = rand(consonants)
-      result.inc(x)
+      result.inc(sample(consonants))
 
 #
 # Problem #2: Update a hand by removing letters
@@ -130,14 +123,14 @@ proc isValidWord*(word: string, hand: CountTable[char], wordList: seq[string]): 
    #
    if word in wordList:
       let lettersExpected = getFrequencyDict(word)
-      for key, val in lettersExpected.pairs():
-         if not hand.hasKey(key):
+      for letter, times in lettersExpected.pairs:
+         if not hand.hasKey(letter):
             return false
-         if hand.getOrDefault(key) < val:
+         elif hand[letter] < times:
             return false
-      return true
+      result = true
 
-proc calculateHandlen*(hand: CountTable[char]): int =
+proc calculateHandlen*(hand: CountTable[char]): Natural =
    #
    # Returns the length (number of letters) in the current hand.
    #
@@ -145,5 +138,5 @@ proc calculateHandlen*(hand: CountTable[char]): int =
    # returns: integer
    #
    result = 0
-   for k, v in hand.pairs():
-      result += v
+   for letter, times in hand.pairs:
+      result += times

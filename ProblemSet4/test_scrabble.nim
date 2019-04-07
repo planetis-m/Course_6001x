@@ -3,26 +3,20 @@
 # You don't need to understand how this test code works (but feel free to look it over!)
 
 # To run these tests, simply run this file (open up in your IDE, then run the file as normal)
+import tables, strutils, algorithm
+import scrabble, rewrites
 
-import tables
-import scrabble
-
-include utils
-include rewrites
-
-proc test_getWordScore() =
+proc testGetWordScore() =
    #
    # Unit test for getWordScore
    #
    var failure = false
-
    # dictionary of words and scores
-   let words = {
-      ("", 7):0, ("it", 7):4, ("was", 7):18, ("scored", 7):54,
-      ("waybill", 7):155, ("outgnaw", 7):127, ("fork", 7):44, ("fork", 4):94
-   }.toTable
+   let words = toTable({
+      ("", 7): 0, ("it", 7): 4, ("was", 7): 18, ("scored", 7): 54,
+      ("waybill", 7): 155, ("outgnaw", 7): 127, ("fork", 7): 44, ("fork", 4): 94})
 
-   for word, n in words.keys():
+   for word, n in words.keys:
       let score = getWordScore(word, n)
       if score != words[(word, n)]:
          echo "FAILURE: test_getWordScore()"
@@ -35,11 +29,12 @@ proc test_getWordScore() =
 
 # end of test_getWordScore
 
-
-proc test_updateHand() =
+proc testUpdateHand() =
    #
    # Unit test for updateHand
    #
+   var failure = false
+
    # test 1
    block test1:
       let handOrig = {'a':1, 'q':1, 'l':2, 'm':1, 'u':1, 'i':1}.toCountTable
@@ -52,14 +47,14 @@ proc test_updateHand() =
          echo "FAILURE: test_updateHand('", word, "', ", handOrig, ")"
          echo "\tReturned: ", hand2, "\n\t-- but expected: ", expectedHand
 
-         return # exit function
+         failure = true
       if handCopy != handOrig:
          echo "FAILURE: test_updateHand('", word, "', ", handOrig, ")"
          echo "\tOriginal hand was ", handOrig
          echo "\tbut implementation of updateHand mutated the original hand!"
          echo "\tNow the hand looks like this: ", handCopy
 
-         return # exit function
+         failure = true
 
    # test 2
    block test2:
@@ -73,7 +68,7 @@ proc test_updateHand() =
          echo "FAILURE: test_updateHand('", word, "', ", handOrig, ")"
          echo "\tReturned: ", hand2, "\n\t-- but expected: ", expectedHand
 
-         return # exit function
+         failure = true
 
       if handCopy != handOrig:
          echo "FAILURE: test_updateHand('", word, "', ", handOrig, ")"
@@ -81,7 +76,7 @@ proc test_updateHand() =
          echo "\tbut implementation of updateHand mutated the original hand!"
          echo "\tNow the hand looks like this: ", handCopy
 
-         return # exit function
+         failure = true
 
    # test 3
    block test3:
@@ -95,7 +90,7 @@ proc test_updateHand() =
          echo "FAILURE: test_updateHand('", word, "', ", handOrig, ")"
          echo "\tReturned: ", hand2, "\n\t-- but expected: ", expectedHand
 
-         return # exit function
+         failure = true
 
       if handCopy != handOrig:
          echo "FAILURE: test_updateHand('", word, "', ", handOrig, ")"
@@ -103,17 +98,19 @@ proc test_updateHand() =
          echo "\tbut implementation of updateHand mutated the original hand!"
          echo "\tNow the hand looks like this: ", handCopy
 
-         return # exit function
+         failure = true
 
-   echo "SUCCESS: test_updateHand()"
+   if not failure:
+      echo "SUCCESS: test_updateHand()"
 
 # end of test_updateHand
 
-proc test_isValidWord(wordList: seq[string]) =
+proc testIsValidWord(wordList: seq[string]) =
    #
    # Unit test for isValidWord
    #
    var failure = false
+
    # test 1
    block test1:
       let word = "hello"
@@ -190,6 +187,17 @@ proc test_isValidWord(wordList: seq[string]) =
    # test 6
    block test6:
       let hand = {'e':1, 'v':2, 'n':1, 'i':1, 'l':2}.toCountTable
+      let word = "evnil"
+
+      if isValidWord(word, hand, wordList):
+         echo "FAILURE: test_isValidWord()"
+         echo "\tExpected false, but got true for word: '", word, "' and hand: ", hand
+
+         failure = true
+
+   # test 7
+   block test7:
+      let hand = {'e':1, 'v':2, 'n':1, 'i':1, 'l':2}.toCountTable
       let word = "even"
 
       if isValidWord(word, hand, wordList):
@@ -202,16 +210,16 @@ proc test_isValidWord(wordList: seq[string]) =
    if not failure:
       echo "SUCCESS: test_isValidWord()"
 
-
-let wordList = loadWords()
+var wordList = loadWords()
+sort(wordList)
 echo "-".repeat(40)
 echo "Testing getWordScore..."
-test_getWordScore()
+testGetWordScore()
 echo "-".repeat(40)
 echo "Testing updateHand..."
-test_updateHand()
+testUpdateHand()
 echo "-".repeat(40)
 echo "Testing isValidWord..."
-test_isValidWord(wordList)
+testIsValidWord(wordList)
 echo "-".repeat(40)
 echo "All done!"

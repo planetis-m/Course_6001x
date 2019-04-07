@@ -1,17 +1,29 @@
 # The 6.00 Word Game
+import rdstdin, strutils, tables, random, algorithm
+import utils, funcs
+export utils, funcs
 
-import rdstdin, strutils, tables
-
-import utils
-import rewrites
-import funcs
-
-export utils
-export rewrites
-export funcs
+type
+   Message* {.pure.} = enum
+      PlayerChoice, MenuChoice, EnterWord, NoHand, InvalidCmd, InvalidWord, TerribleError
+      CurrentHand, CurrentScore, ScoreComputer, ScoreEndGame, ScoreNoLetters
 
 const
    handSize* = 7
+
+   messages*: array[Message, string] = [
+      PlayerChoice: "Enter u to have yourself play, c to have the computer play: ",
+      MenuChoice: "Enter n to deal a new hand, r to replay the last hand, or e to end game: ",
+      EnterWord: "Enter word, or a . to indicate that you are finished: ",
+      NoHand: "You have not played a hand yet. Please play a new hand first!",
+      InvalidCmd: "Invalid command.",
+      InvalidWord: "Invalid word, please try again.",
+      TerribleError: "This is a terrible error! I need to check my own code!",
+      CurrentHand: "\nCurrent Hand: ",
+      CurrentScore: "$1 earned $2 points. Total: $3 points",
+      ScoreComputer: "\nTotal score: $1 points.",
+      ScoreEndGame: "\nGoodbye! Total score: $1 points.",
+      ScoreNoLetters: "\nRun out of letters. Total score: $1 points."]
 
 proc playHand*(hand: CountTable[char], wordList: seq[string], n: int) =
    #
@@ -35,47 +47,39 @@ proc playHand*(hand: CountTable[char], wordList: seq[string], n: int) =
    #   n: integer (HAND_SIZE; i.e., hand size required for additional points)
    #
    var hand = hand
-   var word: string
+   var endGame = false
    # Keep track of the total score
    var totalScore = 0
    # As long as there are still letters left in the hand:
-   while calculateHandlen(hand) > 0:
+   while calculateHandlen(hand) > 0 and not endGame:
       # Display the hand
-      echo "Current Hand: ", displayHand(hand)
-
+      echo messages[CurrentHand], displayHand(hand)
       # Ask user for input
-      word = readLineFromStdin("Enter word, or a . to indicate that you are finished: ")
-
+      let word = readLineFromStdin(messages[EnterWord])
       # If the input is a single period:
       if word == ".":
-         # End the game (break out of the loop)
-         break
-
+         endGame = true # End the game (break out of the loop)
       # Otherwise (the input is not a single period):
       else:
          # If the word is not valid:
          if not isValidWord(word, hand, wordList):
             # Reject invalid word (print a message followed by a blank line)
-            echo "Invalid word, please try again."
-            echo ""
-
+            echo messages[InvalidWord]
          # Otherwise (the word is valid):
          else:
-            # Tell the user how many points the word earned, and the updated total score, in one line followed by a blank line
+            # Tell the user how many points the word earned, and the updated total score,
+            # in one line followed by a blank line
             let score = getWordScore(word, n)
             totalScore += score
-            echo "$1 earned $2 points. Total: $3 points" % [$word, $score, $totalScore]
-            echo ""
+            echo messages[CurrentScore].format(word, score, totalScore)
             # Update the hand
             hand = updateHand(hand, word)
 
    # Game is over (user entered a '.' or ran out of letters), so tell user the total score
-   if word == ".":
-      echo "Goodbye! Total score: $1 points." % [$totalScore]
-      echo ""
+   if endGame:
+      echo messages[ScoreEndGame].format(totalScore)
    else:
-      echo "Run out of letters. Total score: $1 points." % [$totalScore]
-      echo ""
+      echo messages[ScoreNoLetters].format(totalScore)
 
 proc playGame(wordList: seq[string]) =
    #
@@ -90,23 +94,28 @@ proc playGame(wordList: seq[string]) =
    # 2) When done playing the hand, repeat from step 1
    #
    var hand: CountTable[char]
-   while true:
-      let choice = readLineFromStdin("Enter n to deal a new hand, r to replay the last hand, or e to end game: ")
+   var exitGame = false
+   while not exitGame:
+      let choice = readLineFromStdin(messages[MenuChoice])
       if choice == "n":
          hand = dealHand(handSize)
          playHand(hand, wordList, handSize)
       elif choice == "r":
-         if len(hand) == 0:
-            echo "You have not played a hand yet. Please play a new hand first!"
+         if hand.len == 0:
+            echo messages[NoHand]
          else:
             playHand(hand, wordList, handSize)
       elif choice != "e":
-         echo "Invalid command."
+         echo messages[InvalidCmd]
       else:
-         break
+         exitGame = true
 
-proc main() =
-   let wordlist = loadWords()
+proc main() {.used.} =
+   # Initializes the random number generator
+   randomize()
+   var wordlist = loadWords()
+   # isValidWord calls binarySearch, so wordList needs to be ordered.
+   sort(wordList)
    playGame(wordList)
 
 when isMainModule:
