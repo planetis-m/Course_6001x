@@ -1,7 +1,6 @@
 # The 6.00 Word Game
 import rdstdin, strutils, tables, random, algorithm
 import utils, funcs
-export utils, funcs
 
 type
    Message* {.pure.} = enum

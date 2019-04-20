@@ -1,5 +1,5 @@
 import rdstdin, strutils, tables, random, algorithm
-import scrabble
+import scrabble, utils, funcs
 
 #
 #

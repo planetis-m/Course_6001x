@@ -1,25 +1,16 @@
 
-block:
-   type
-      Warm = ref seq[string]
+type
+   Warm = ref seq[string]
 
-   var w: Warm
-   new(w)
-   w[] = @["red", "yellow", "orange"]
-   let h = w
+var w: owned Warm
+new(w)
+w[] = @["red", "yellow", "orange"]
+let h = w
 
-   h[].add("pink")
+h[].add("pink")
 
-   echo cast[ByteAddress](w)
-   echo cast[ByteAddress](h)
+echo cast[ByteAddress](w)
+echo cast[ByteAddress](h)
 
-   echo w[]
+echo w[]
 
-block:
-   var w = @["red", "yellow", "orange"]
-   shallow(w)
-   var h = w # or shallowCopy(w)
-
-   h.add("pink") # one must not modify the copy
-   echo h
-   echo w
