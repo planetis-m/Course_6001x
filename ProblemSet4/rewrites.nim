@@ -13,5 +13,5 @@ proc contains*(a: seq[string], item: string): bool {.inline.} =
 proc toCountTable*[A](pairs: openArray[(A, int)]): CountTable[A] =
    # Creates a new count table with every member of a container ``pairs``
    # having a count of `val`. Used in test_scrabble, only.
-   result = initCountTable[A](rightSize(pairs.len))
+   result = initCountTable[A](pairs.len)
    for key, val in pairs.items: result.inc(key, val)

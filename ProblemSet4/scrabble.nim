@@ -93,8 +93,7 @@ proc playGame(wordList: seq[string]) =
    # 2) When done playing the hand, repeat from step 1
    #
    var hand: CountTable[char]
-   var exitGame = false
-   while not exitGame:
+   while true:
       let choice = readLineFromStdin(messages[MenuChoice])
       if choice == "n":
          hand = dealHand(handSize)
@@ -107,7 +106,7 @@ proc playGame(wordList: seq[string]) =
       elif choice != "e":
          echo messages[InvalidCmd]
       else:
-         exitGame = true
+         break
 
 proc main() {.used.} =
    # Initializes the random number generator

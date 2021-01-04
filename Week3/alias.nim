@@ -2,7 +2,7 @@
 type
    Warm = ref seq[string]
 
-var w: owned Warm
+var w: Warm
 new(w)
 w[] = @["red", "yellow", "orange"]
 let h = w

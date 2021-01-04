@@ -4,7 +4,7 @@
 
 # To run these tests, simply run this file (open up in your IDE, then run the file as normal)
 import tables, strutils, algorithm
-import scrabble, rewrites
+import scrabble, rewrites, funcs, utils
 
 proc testGetWordScore() =
    #

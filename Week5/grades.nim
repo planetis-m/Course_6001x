@@ -5,7 +5,7 @@ type
       Grad, Ug
    Student = object
       name: string
-      idNum: int  # a unique ID number
+      idNum: int # a unique ID number
       case kind: StudentKind
       of Ug:
          year: int
@@ -37,7 +37,7 @@ proc getIdNum(self: Student): int =
 proc cmp(self, other: Student): int =
    self.idNum - other.idNum
 
-proc `==`(self, other: Student): bool =
+proc ` == `(self, other: Student): bool =
    self.idNum == other.idNum
 
 proc `$`(self: Student): string =
@@ -49,9 +49,9 @@ proc getClass(self: Student): int =
 
 type
    Grades = object ## A mapping from students to a list of grades
-      students: seq[Student]
-      grades: Table[int, seq[float]]
-      isSorted: bool
+      students: seq[Student]         ## list of Student objects
+      grades: Table[int, seq[float]] ## maps idNum -> list of grades
+      isSorted: bool                 ## true if self.students is sorted
 
 # -------------------
 # Grade type routines
@@ -59,9 +59,7 @@ type
 
 proc initGrades(): Grades =
    ## Create empty grade book
-   result.students = @[] # list of Student objects
-   result.grades = initTable[int, seq[float]]() # maps idNum -> list of grades
-   result.isSorted = true # true if self.students is sorted
+   result.isSorted = true
 
 proc addStudent(self: var Grades, student: Student) =
    ## Assumes: student is of type Student
@@ -82,7 +80,7 @@ proc addGrade(self: var Grades, student: Student, grade: float) =
 
 proc getGrades(self: Grades, student: Student): seq[float] =
    ## Return a list of grades for student
-   try: # return copy of student's grades
+   try:  # return copy of student's grades
       result = self.grades[student.getIdNum()]
    except KeyError:
       raise newException(ValueError, "Student not in grade book")
@@ -97,7 +95,7 @@ proc allStudents(self: var Grades): seq[Student] =
 
 proc gradeReport(course: var Grades): string =
    # Assumes: course if of type grades
-   var report: seq[string] = @[]
+   var report: seq[string]
    for s in course.allStudents():
       var tot = 0.0
       var numGrades = 0
