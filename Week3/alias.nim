@@ -1,6 +1,7 @@
+import std/syncio
 
 type
-   Warm = ref seq[string]
+  Warm = ref seq[string]
 
 var w: Warm
 new(w)
@@ -9,8 +10,8 @@ let h = w
 
 h[].add("pink")
 
-echo cast[ByteAddress](w)
-echo cast[ByteAddress](h)
+echo cast[uint](w)
+echo cast[uint](h)
 
 echo w[]
 

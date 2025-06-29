@@ -1,4 +1,4 @@
-import tables
+import std/[assertions, tables, syncio]
 
 var grades = {"Ana": "B", "John": "A+", "Denise", "Katy": "A"}.toTable
 
@@ -15,4 +15,4 @@ del(grades, "Ana")
 echo grades
 
 for key, value in pairs(grades):
-   echo key, ' ', value
+  echo key, ' ', value

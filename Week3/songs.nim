@@ -1,31 +1,31 @@
-import tables, loadwords
+import std/[tables, syncio], loadwords
 
 proc lyricsToFrequencies(lyrics: seq[string]): CountTable[string] =
-   for word in lyrics.items:
-      result.inc(word)
+  for word in lyrics.items:
+    result.inc(word)
 
 proc mostCommonWords(freqs: CountTable[string]): (seq[string], int) =
-   var values: seq[int]
-   for value in values(freqs):
-      values.add(value)
-   let best = max(values)
-   var words: seq[string]
-   for (key, value) in pairs(freqs):
-      if value == best:
-         words.add(key)
-   (words, best)
+  var values: seq[int]
+  for value in values(freqs):
+    values.add(value)
+  let best = max(values)
+  var words: seq[string]
+  for (key, value) in pairs(freqs):
+    if value == best:
+      words.add(key)
+  (words, best)
 
 proc wordsOften(freqs: var CountTable[string]; minTimes: int): OrderedTable[
       seq[string], int] =
-   var done = false
-   while not done:
-      let (words, best) = mostCommonWords(freqs)
-      if best >= minTimes:
-         result[words] = best
-         for word in words:
-            freqs.del(word)   # remove word from dictionary
-      else:
-         done = true
+  var done = false
+  while not done:
+    let (words, best) = mostCommonWords(freqs)
+    if best >= minTimes:
+      result[words] = best
+      for word in words:
+        freqs.del(word) # remove word from dictionary
+    else:
+      done = true
 
 let sheLovesYou = loadWords()
 var beatles = lyricsToFrequencies(sheLovesYou)

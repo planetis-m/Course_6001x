@@ -4,12 +4,14 @@
 # 
 # Number of vowels: 5
 
+import std/syncio
+
 let s = "azcbobobegghakl"
 let vowels = "aeiou"
 var result = 0
 
 for letter in s:
-   if letter in vowels:
-      inc(result)
+  if letter in vowels:
+    inc(result)
 
 echo "Number of vowels: ", $result
