@@ -122,14 +122,14 @@ when isMainModule:
   class Animal(RootObj):
     var age: int
     method vocalize {.base.} = echo "..."
-    proc `$`: string = "animal:" & $self.age
+    proc `$`: string = "animal:" & $age
 
   class Person(Animal):
-    var name: string
+    var name: string = ""
     proc newPerson(name: string, age: int) =
-      result = Person(name: name, age: age)
+      Person(name: name, age: age)
     method vocalize = echo "Hey"
-    proc `$`: string = "person:" & self.name & ":" & $self.age
+    proc `$`: string = "person:" & name & ":" & $age
 
   let john = newPerson("John", 10)
   john.vocalize()

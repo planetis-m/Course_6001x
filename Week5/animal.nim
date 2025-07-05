@@ -3,6 +3,7 @@ import oopmacro
 class Animal(RootObj):
   var age: int
   var name: string
+
   proc speak = echo "..."
   proc getAge: int = age
   proc getName: string = name
@@ -24,6 +25,7 @@ class Rabbit(Animal):
 
 class Person(Animal):
   var friends: seq[Person]
+
   proc newPerson(name: string, age: int) =
     Person(name: name, age: age, friends: @[])
   proc speak = echo "Hello"
