@@ -3,7 +3,7 @@
 # You don't need to understand how this test code works (but feel free to look it over!)
 
 # To run these tests, simply run this file (open up in your IDE, then run the file as normal)
-import tables, strutils, algorithm
+import std/[tables, strutils, algorithm, syncio]
 import scrabble, rewrites, funcs, utils
 
 proc testGetWordScore() =

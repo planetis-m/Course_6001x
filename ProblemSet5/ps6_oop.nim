@@ -1,4 +1,4 @@
-import oopmacro, algorithm, tables, strutils
+import std/[oopmacro, algorithm, tables, strutils, syncio]
 include utils
 
 class Message(RootObj):

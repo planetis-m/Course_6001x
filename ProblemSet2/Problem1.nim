@@ -2,8 +2,7 @@
 # if a person only pays the minimum monthly payment required by the 
 # credit card company each month.
 
-# Needed for round
-import math
+import std/[math, syncio]
 
 let
    annualInterestRate = 0.2 # annual interest rate as a decimal

@@ -1,4 +1,4 @@
-import math
+import std/[math, syncio]
 {.floatChecks: on.}
 
 proc avg(grades: seq[float]): float =

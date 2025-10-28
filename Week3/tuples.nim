@@ -1,3 +1,5 @@
+import std/syncio
+
 proc quotient_reminder(x, y: int): auto =
    return (x div y, x mod y)
 

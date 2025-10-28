@@ -1,3 +1,5 @@
+import std/[assertions, syncio]
+
 type
   PExpr = ref object of RootObj ## abstract base class for an expression
     evalImpl: proc(e: PExpr): int {.nimcall.}

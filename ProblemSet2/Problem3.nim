@@ -1,5 +1,5 @@
 # Needed for pow, round
-import math
+import std/[math, syncio]
 
 let
    annualInterestRate = 0.18 # annual interest rate as a decimal

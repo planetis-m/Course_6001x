@@ -1,4 +1,4 @@
-import algorithm, times, parseutils
+import std/[algorithm, times, parseutils, syncio]
 
 type
    Person = object

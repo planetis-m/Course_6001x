@@ -2,7 +2,7 @@
 # Common functions
 # (shared by both games)
 
-import random, tables
+import std/[random, tables]
 import rewrites
 
 const

@@ -2,7 +2,7 @@
 # Redefinitions
 # (used to overload procedures)
 
-import algorithm, tables
+import std/[algorithm, tables]
 
 proc contains*(a: seq[string], item: string): bool {.inline.} =
    # in operator calls the procedure contains, which

@@ -1,4 +1,4 @@
-import os, rdstdin
+import std/[os, rdstdin]
 
 var nameHandle = open("kids.txt", fmWrite)
 

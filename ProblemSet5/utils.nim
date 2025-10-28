@@ -1,4 +1,6 @@
 
+import std/[strutils, syncio]
+
 const
    wordlist_filename = "words.txt"
    Punctuation = {'!'..'/', ':'..'@', '['..'`', '{'..'~'}

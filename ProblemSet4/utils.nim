@@ -2,7 +2,7 @@
 # Helper code
 # (you don't need to understand this helper code)
 
-import strutils
+import std/[strutils, syncio]
 
 const wordlistFilename = "words.txt"
 

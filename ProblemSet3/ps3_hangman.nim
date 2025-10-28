@@ -1,6 +1,6 @@
 # Hangman game
 #
-import random, rdstdin, strutils
+import std/[random, rdstdin, strutils, syncio]
 
 type
    Message {.pure.} = enum

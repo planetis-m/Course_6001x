@@ -1,4 +1,4 @@
-import rdstdin, strutils, tables, random, algorithm
+import std/[rdstdin, strutils, tables, random, algorithm, syncio]
 import scrabble, utils, funcs
 
 #

@@ -1,4 +1,4 @@
-import algorithm, tables, strutils
+import std/[algorithm, tables, strutils, assertions, syncio]
 
 type
    StudentKind = enum

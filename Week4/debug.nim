@@ -1,4 +1,4 @@
-import algorithm, rdstdin
+import std/[algorithm, rdstdin, syncio]
 
 proc isPal(x: seq[string]): bool =
    let temp = x.reversed()

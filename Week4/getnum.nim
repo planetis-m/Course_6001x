@@ -1,4 +1,4 @@
-import rdstdin, strutils
+import std/[rdstdin, strutils, syncio]
 
 while true:
    try:

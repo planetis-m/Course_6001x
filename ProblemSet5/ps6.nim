@@ -1,4 +1,4 @@
-import tables, strutils
+import std/[tables, strutils, syncio]
 include utils
 
 type

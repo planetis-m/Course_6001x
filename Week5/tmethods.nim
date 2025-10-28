@@ -1,3 +1,5 @@
+import std/syncio
+
 type
   PExpr = ref object of RootObj ## abstract base class for an expression
   PLiteral = ref object of PExpr

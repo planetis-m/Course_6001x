@@ -1,3 +1,5 @@
+import std/syncio
+
 type
   Iterable[T] = concept c
     for x in items(c): x is T

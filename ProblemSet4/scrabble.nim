@@ -1,5 +1,5 @@
 # The 6.00 Word Game
-import rdstdin, strutils, tables, random, algorithm
+import std/[rdstdin, strutils, tables, random, algorithm, syncio]
 import utils, funcs
 
 type

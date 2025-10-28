@@ -1,4 +1,4 @@
-import std/[macros, macrocache]
+import std/[macros, macrocache, syncio]
 
 # Compile-time storage of class fields and inheritance
 const classFields = CacheTable"classFields"

@@ -1,4 +1,4 @@
-include rdstdin, strtabs
+import std/[rdstdin, strtabs, syncio]
 
 const
   msg1 = "Please think of a number between 0 and 100!"

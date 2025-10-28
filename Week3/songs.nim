@@ -1,4 +1,5 @@
-import std/[tables, syncio], loadwords
+import std/[tables, syncio]
+import loadwords
 
 proc lyricsToFrequencies(lyrics: seq[string]): CountTable[string] =
   for word in lyrics.items:

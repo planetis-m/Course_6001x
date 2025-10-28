@@ -1,4 +1,4 @@
-import math
+import std/[math, syncio]
 
 type
    Coordinate = ref object

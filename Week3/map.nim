@@ -1,4 +1,4 @@
-import sequtils
+import std/[sequtils, syncio]
 
 var testList = @[1, -4, 8, -9]
 

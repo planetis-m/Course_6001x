@@ -1,13 +1,13 @@
-import algorithm, random
+import std/[algorithm, random, assertions]
 
 type
   Iterable = concept c
-    for x in items(c): discard
+    iterator items(a: Self): T
 
-  Indexable[T] = concept c
-    var i: int
-    c[i] is T
-    c.len is int
+  Indexable[T] = concept
+    proc `[]`(a: Self; index: int): var T
+    proc `[]=`(a: var Self; index: int; value: T)
+    proc len(a: Self): int
 
 proc bogoSort[T](s: var seq[T]) =
   while not isSorted(s, cmp):

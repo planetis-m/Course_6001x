@@ -1,3 +1,5 @@
+import std/syncio
+
 type
   ExprKind = enum
     literal, plusExpr

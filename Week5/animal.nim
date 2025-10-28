@@ -1,3 +1,4 @@
+import std/[syncio]
 import oopmacro
 
 class Animal(RootObj):

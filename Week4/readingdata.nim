@@ -1,4 +1,4 @@
-import algorithm, rdstdin, strutils
+import std/[algorithm, rdstdin, strutils, syncio]
 
 let file_name = readLineFromStdin("Provide a name of a file of data: ")
 

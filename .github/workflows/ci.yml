@@ -15,12 +15,6 @@ jobs:
       with:
         nim-version: 'stable'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-    - name: Update package list
-      run: |
-        sudo apt update
-    - name: Install dependencies
-      run: |
-        sudo apt install -y libasound2-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libxcursor-dev libxinerama-dev libwayland-dev libxkbcommon-dev libwayland-bin mingw-w64
     - name: Clone and build nimony
       run: |
         git clone https://github.com/nim-lang/nimony.git

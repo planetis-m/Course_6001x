@@ -1,3 +1,5 @@
+import std/syncio
+
 proc intToStr(n: int): string =
   const digits = "0123456789"
   var n = n
