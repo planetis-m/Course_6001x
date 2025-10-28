@@ -1,4 +1,4 @@
-import os, osproc, streams, strutils, times, sequtils
+import std/[os, osproc, streams, strutils, times, sequtils, strformat]
 
 const
   stError = "\e[31;1m"
